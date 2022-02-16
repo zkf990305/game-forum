@@ -1,0 +1,15 @@
+@import "var.scss";
+@import "global.scss";
+
+/*点赞收藏*/
+
+.redZan {
+  background-color: red;
+}
+.Zan {
+  background-color: #ffffff;
+}
+
+.icon {
+  @include icon(1em);
+}
