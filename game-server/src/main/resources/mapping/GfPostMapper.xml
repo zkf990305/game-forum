@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fancoding.basic.project.mapper.GfPostMapper">
+
+
+
+    <select id="listPost"
+            resultType="com.fancoding.basic.project.entity.GfPost">
+        select `gf_post`.*
+        from `gf_post`
+
+        where `gf_post`.status = 1
+    </select>
+    <select id="findByClassify"
+            resultType="com.fancoding.basic.project.entity.GfPost">
+
+        select `gf_post`.*
+        from `gf_post`
+                 left join `gf_post__gf_post_classify` on `gf_post`.id = `gf_post__gf_post_classify`.pid
+                 left join `gf_post_classify` on `gf_post_classify`.id = `gf_post__gf_post_classify`.classify_id
+        where `gf_post_classify`.classify = #{classify} and `gf_post`.status = 1
+    </select>
+    <select id="findByTag"
+            resultType="com.fancoding.basic.project.entity.GfPost">
+        select `gf_post`.*
+        from `gf_post`
+                 left join `gf_post__gf_post_tag` on `gf_post`.id = `gf_post__gf_post_tag`.pid
+                 left join `gf_post_tag` on `gf_post_tag`.id = `gf_post__gf_post_tag`.tag_id
+        where `gf_post_tag`.tag = #{tag} and `gf_post`.status = 1
+    </select>
+    <select id="getPostListOfCollect"
+            resultType="com.fancoding.basic.project.entity.GfPost">
+        select *
+        from gf_post gp, gf_post_collect gpc
+        where gpc.uid = #{id} and gpc.type = 0 and gpc.collect_id = gp.id;
+    </select>
+</mapper>

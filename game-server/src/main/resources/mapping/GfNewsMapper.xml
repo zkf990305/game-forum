@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fancoding.basic.project.mapper.GfNewsMapper">
+
+    <select id="getNewsOfTheFirstEight"
+            resultType="com.fancoding.basic.project.entity.GfNews">
+        SELECT * FROM `gf_news`
+        ORDER BY gmt_updatetime DESC
+            LIMIT 8;
+    </select>
+</mapper>

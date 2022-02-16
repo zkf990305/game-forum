@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fancoding.basic.project.mapper.GfPostClassifyMapper">
+
+    <select id="getAllPostClassify"
+            resultType="com.fancoding.basic.project.entity.GfPostClassify">
+        select * from gf_post_classify;
+    </select>
+    <select id="getPostClassifyOfPostId"
+            resultType="com.fancoding.basic.project.entity.GfPostClassify">
+        select `gf_post_classify`. *
+        from `gf_post__gf_post_classify`
+            left join `gf_post` on `gf_post`.id = `gf_post__gf_post_classify`.pid
+            left join `gf_post_classify` on `gf_post_classify`.id = `gf_post__gf_post_classify`.classify_id
+        where `gf_post`.id = #{id}
+    </select>
+</mapper>

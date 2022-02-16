@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fancoding.basic.project.mapper.GfPostCommentMapper">
+
+    <update id="updateCommentNumberOfLikes">
+        update `gf_post_comment` as gpc
+        set `like` = (
+            select count(*)
+            from `gf_post_like` as gpl
+            where gpl.type = 2 and gpl.like_id = gpc.id
+        )
+        WHERE gpc.type = #{type} and gpc.comment_id = #{id};
+    </update>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fancoding.basic.project.mapper.GfGameMapper">
+
+    <select id="findByGameType" resultType="com.fancoding.basic.project.entity.GfGame">
+        select `gf_game`.*
+        from `gf_game`
+                 left join `gf_game__gf_game_type` on `gf_game`.id = `gf_game__gf_game_type`.gid
+                 left join `gf_game_type` on `gf_game_type`.id = `gf_game__gf_game_type`.type_id
+        where `gf_game_type`.type = #{type}
+    </select>
+    <select id="getNewsOfTheFirstEight"
+            resultType="com.fancoding.basic.project.entity.GfGame">
+        SELECT * FROM `gf_game`
+--         ORDER BY gmt_updatetime DESC
+            LIMIT 8;
+    </select>
+    <select id="getGameListOfCollect"
+            resultType="com.fancoding.basic.project.entity.GfGame">
+        select *
+        from gf_game gp, gf_post_collect gpc
+        where gpc.uid = #{id} and gpc.type = 1 and gpc.collect_id = gp.id;
+    </select>
+
+</mapper>
