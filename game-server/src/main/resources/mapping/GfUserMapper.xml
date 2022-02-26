@@ -2,4 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.fancoding.basic.project.mapper.GfUserMapper">
 
+    <select id="getAllUser"
+            resultType="com.fancoding.basic.project.utils.vo.GfUserVo">
+        SELECT gui.id, gu.username, gu.password, gu.avatar_url, gu.`status`, gui.uid, gui.real_name, gui.birthday, gui.gender, gui.qq, gui.we_chat, gui.email, gui.phone, gui.address, gui.intro, gugur.rid as role
+        FROM `gf_user` gu
+                 LEFT JOIN `gf_user_info` gui ON gu.id = gui.uid
+                 LEFT JOIN `gf_user__gf_user_role` gugur ON gu.id = gugur.uid;
+    </select>
+    <select id="getGfUserByUserId"
+            resultType="com.fancoding.basic.project.utils.vo.InfoVo">
+        SELECT gu.id, gu.username,  gu.avatar_url,  gui.real_name, gui.birthday, gui.gender, gui.qq, gui.we_chat, gui.email, gui.phone, gui.address, gui.intro, gugur.rid as role, gu.gmt_create
+        FROM `gf_user` gu
+                 LEFT JOIN `gf_user_info` gui ON gu.id = gui.uid
+                 LEFT JOIN `gf_user__gf_user_role` gugur ON gu.id = gugur.uid
+        WHERE gu.id = #{id};
+
+    </select>
 </mapper>

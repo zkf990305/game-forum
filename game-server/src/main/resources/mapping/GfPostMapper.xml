@@ -8,7 +8,6 @@
             resultType="com.fancoding.basic.project.entity.GfPost">
         select `gf_post`.*
         from `gf_post`
-
         where `gf_post`.status = 1
     </select>
     <select id="findByClassify"

@@ -18,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -102,6 +103,19 @@ public class GfPostController {
     }
 
     /**
+     * 获取全部帖子列表
+     * @return 帖子列表
+     */
+    @ApiOperation("获取全部帖子列表")
+    @GetMapping("/allPostList")
+    public ResultVo allPostList() {
+        List<GfPost> list = gfPostService.list(
+                new QueryWrapper<GfPost>()
+                        .orderByAsc("status"));
+        return ResultVoUtil.success(list);
+    }
+
+    /**
      * 获取对应类型的帖子
      * @param classify
      * @return
@@ -160,6 +174,52 @@ public class GfPostController {
     public ResultVo listPostOfMe(@PathVariable String id) {
         List<GfPost> list = gfPostService.listPostOfMe(id);
         return ResultVoUtil.success(list);
+    }
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @ApiOperation("批量删除")
+    @PostMapping("/removeBatch")
+    public ResultVo removeBatchOfPost(@Validated @RequestBody List<String> ids) {
+        System.out.println(ids.toString());
+        return ResultVoUtil.success(gfPostService.removeByIds(ids));
+    }
+
+    /**
+     * 删除帖子
+     * @param id
+     * @return
+     */
+    @ApiOperation("删除帖子")
+    @DeleteMapping("/delete/{id}")
+    public ResultVo deletePost(@PathVariable Integer id) {
+        boolean result = gfPostService.deletePost(id);
+        if (result) {
+            return ResultVoUtil.success();
+        }else {
+            return ResultVoUtil.error(ResultEnum.DELETE_ERROR);
+        }
+    }
+
+    /**
+     * 状态修改
+     * @param gfPost
+     * @return
+     */
+    @ApiOperation("状态修改")
+    @ResponseBody
+    @PostMapping("/changePostStatus")
+    public ResultVo changePostStatus(@Validated @RequestBody GfPost gfPost) {
+        boolean res = gfPostService.changePostStatus(gfPost.getId(), gfPost.getStatus());
+        if (res) {
+            return ResultVoUtil.success();
+        }else {
+            return ResultVoUtil.error("状态修改失败");
+        }
+
     }
 
 

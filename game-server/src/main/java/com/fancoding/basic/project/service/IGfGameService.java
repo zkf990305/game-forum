@@ -42,4 +42,18 @@ public interface IGfGameService extends IService<GfGame> {
      * @return
      */
     List<GfGame> getGameListOfCollect(String id);
+
+    /**
+     * 删除游戏
+     * @param id
+     * @return
+     */
+    boolean deleteGame(Integer id);
+
+    /**
+     * 插入游戏
+     * @param gfGame
+     * @return
+     */
+    int addGame(GfGame gfGame);
 }

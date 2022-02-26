@@ -53,4 +53,23 @@ public class GfGameServiceImpl extends ServiceImpl<GfGameMapper, GfGame> impleme
     public List<GfGame> getGameListOfCollect(String id) {
         return gfGameMapper.getGameListOfCollect(id);
     }
+
+    /**
+     * 删除游戏
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deleteGame(Integer id) {
+        return gfGameMapper.deleteById(id) == 1;
+    }
+
+    /**
+     * 添加游戏
+     * @param gfGame
+     */
+    @Override
+    public int addGame(GfGame gfGame) {
+        return gfGameMapper.insert(gfGame);
+    }
 }

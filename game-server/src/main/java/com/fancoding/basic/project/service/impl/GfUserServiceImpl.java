@@ -1,12 +1,21 @@
 package com.fancoding.basic.project.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fancoding.basic.project.entity.GfUser;
+import com.fancoding.basic.project.enums.ResultEnum;
+import com.fancoding.basic.project.form.gf_user.ResetPwdForm;
 import com.fancoding.basic.project.mapper.GfUserMapper;
 import com.fancoding.basic.project.service.IGfUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fancoding.basic.project.utils.ResultVoUtil;
+import com.fancoding.basic.project.utils.vo.GfUserVo;
+import com.fancoding.basic.project.utils.vo.InfoVo;
+import com.fancoding.basic.project.utils.vo.ResultVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -51,4 +60,45 @@ public class GfUserServiceImpl extends ServiceImpl<GfUserMapper, GfUser> impleme
                         .eq("username", username)
         );
     }
+
+    @Override
+    public List<GfUserVo> getAllUser() {
+        return gfUserMapper.getAllUser();
+    }
+
+    @Override
+    public boolean deleteUser(String id) {
+        return gfUserMapper.deleteById(id) == 1;
+    }
+
+    /**
+     * 个人信息
+     * @param id
+     * @return
+     */
+    @Override
+    public InfoVo getGfUserByUserId(String id) {
+        return gfUserMapper.getGfUserByUserId(id);
+    }
+
+    /**
+     * 修改密码
+     * @param id
+     * @param newPassword
+     * @return
+     */
+    @Override
+    public ResultVo updateUserPwd(String id, String newPassword) {
+        int update = gfUserMapper.update(
+                null, new UpdateWrapper<GfUser>()
+                        .eq("id", id)
+                        .set("password", newPassword));
+        if (update == 1) {
+            return ResultVoUtil.success();
+        }else {
+            return ResultVoUtil.error(ResultEnum.UPDATE_ERROR);
+        }
+    }
+
+
 }

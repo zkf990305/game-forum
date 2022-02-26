@@ -1,6 +1,8 @@
 package com.fancoding.basic.project.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.fancoding.basic.project.entity.GfPost;
 import com.fancoding.basic.project.entity.GfPostComment;
 import com.fancoding.basic.project.mapper.GfPostCommentMapper;
 import com.fancoding.basic.project.service.IGfPostCommentService;
@@ -88,5 +90,19 @@ public class GfPostCommentServiceImpl extends ServiceImpl<GfPostCommentMapper, G
     @Override
     public boolean updateCommentNumberOfLikes(Integer type, Integer id) {
         return gfPostCommentMapper.updateCommentNumberOfLikes(type, id);
+    }
+
+    /**
+     * 状态修改
+     * @param id
+     * @param status
+     * @return
+     */
+    @Override
+    public boolean changeCommentStatus(Integer id, Integer status) {
+        return gfPostCommentMapper.update(null,
+                new UpdateWrapper<GfPostComment>()
+                        .eq("id", id)
+                        .set("status", status)) == 1;
     }
 }

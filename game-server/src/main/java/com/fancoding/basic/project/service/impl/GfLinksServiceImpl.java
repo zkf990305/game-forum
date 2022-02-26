@@ -19,4 +19,14 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class GfLinksServiceImpl extends ServiceImpl<GfLinksMapper, GfLinks> implements IGfLinksService {
 
+    private GfLinksMapper gfLinksMapper;
+    /**
+     * 删除友链
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deleteLinks(Integer id) {
+        return gfLinksMapper.deleteById(id) == 1;
+    }
 }

@@ -13,4 +13,10 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGfLinksService extends IService<GfLinks> {
 
+    /**
+     * 删除友链
+     * @param id
+     * @return
+     */
+    boolean deleteLinks(Integer id);
 }

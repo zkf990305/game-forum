@@ -22,4 +22,9 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class GfGameGfGameTypeServiceImpl extends ServiceImpl<GfGameGfGameTypeMapper, GfGameGfGameType> implements IGfGameGfGameTypeService {
 
+    private GfGameGfGameTypeMapper gfGameGfGameTypeMapper;
+    @Override
+    public void addType(GfGameGfGameType gfGameGfGameType) {
+        gfGameGfGameTypeMapper.insert(gfGameGfGameType);
+    }
 }

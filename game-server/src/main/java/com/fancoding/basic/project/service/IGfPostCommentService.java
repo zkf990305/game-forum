@@ -56,4 +56,12 @@ public interface IGfPostCommentService extends IService<GfPostComment> {
      * @return
      */
     boolean updateCommentNumberOfLikes(Integer type, Integer id);
+
+    /**
+     * 状态修改
+     * @param id
+     * @param status
+     * @return
+     */
+    boolean changeCommentStatus(Integer id, Integer status);
 }

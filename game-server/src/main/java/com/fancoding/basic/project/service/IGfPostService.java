@@ -67,4 +67,19 @@ public interface IGfPostService extends IService<GfPost> {
      * @return
      */
     List<GfPost> listPostOfMe(String id);
+
+    /**
+     * 删除帖子
+     * @param id
+     * @return
+     */
+    boolean deletePost(Integer id);
+
+    /**
+     * 状态修改
+     * @param id
+     * @param status
+     * @return
+     */
+    boolean changePostStatus(Integer id, Integer status);
 }

@@ -3,6 +3,7 @@ server:
   port: 8082
   servlet:
     context-path: /game-server
+  max-http-header-size: 102400
 # file.ip 文件上传下载
 
 file:

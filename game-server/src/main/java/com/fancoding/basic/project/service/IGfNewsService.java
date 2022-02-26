@@ -26,4 +26,12 @@ public interface IGfNewsService extends IService<GfNews> {
      * @return
      */
     List<GfNews> getNewsOfTheFirstEight();
+
+
+    /**
+     * 删除公告
+     * @param id
+     * @return
+     */
+    boolean deleteNews(Integer id);
 }

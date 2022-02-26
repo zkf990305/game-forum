@@ -1,6 +1,8 @@
 package com.fancoding.basic.project.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fancoding.basic.project.entity.GfPost;
 import com.fancoding.basic.project.entity.GfPostComment;
 import com.fancoding.basic.project.enums.ResultEnum;
 import com.fancoding.basic.project.service.IGfPostCommentService;
@@ -80,14 +82,38 @@ public class GfPostCommentController {
     }
 
     /**
-     * 获取所有评论列表
+     * 获取所有评论列表 已审核
      * @return
      */
     @ApiOperation("获取所有评论列表")
     @GetMapping("/commentList")
-    public ResultVo allComment(){
+    public ResultVo CommentList(){
         List<GfPostComment> comments =  gfPostCommentService.allComment();
         return ResultVoUtil.success(comments);
+    }
+
+    /**
+     * 获取所有评论列表
+     * @return
+     */
+    @ApiOperation("获取所有评论列表")
+    @GetMapping("/allComment")
+    public ResultVo allComment(){
+        List<GfPostComment> comments =  gfPostCommentService.list(
+                new QueryWrapper<GfPostComment>()
+                        .orderByAsc("status"));
+        return ResultVoUtil.success(comments);
+    }
+
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
+    @ApiOperation("批量删除")
+    @PostMapping("/removeBatch")
+    public ResultVo removeBatchOfComment(@Validated @RequestBody List<String> ids) {
+        return ResultVoUtil.success(gfPostCommentService.removeByIds(ids));
     }
 
     /**
@@ -96,12 +122,30 @@ public class GfPostCommentController {
      * @return
      */
     @ApiOperation("删除评论")
-    @GetMapping( "/delete/{id}")
+    @DeleteMapping( "/delete/{id}")
     public ResultVo deleteComment(@PathVariable Integer id){
         if (gfPostCommentService.deleteComment(id)) {
             return ResultVoUtil.success("成功删除评论");
         }else {
             return ResultVoUtil.error(ResultEnum.DELETE_ERROR);
         }
+    }
+
+    /**
+     * 状态修改
+     * @param gfPostComment
+     * @return
+     */
+    @ApiOperation("状态修改")
+    @ResponseBody
+    @PostMapping("/changeCommentStatus")
+    public ResultVo changeCommentStatus(@Validated @RequestBody GfPostComment gfPostComment) {
+        boolean res = gfPostCommentService.changeCommentStatus(gfPostComment.getId(), gfPostComment.getStatus());
+        if (res) {
+            return ResultVoUtil.success();
+        }else {
+            return ResultVoUtil.error("状态修改失败");
+        }
+
     }
 }

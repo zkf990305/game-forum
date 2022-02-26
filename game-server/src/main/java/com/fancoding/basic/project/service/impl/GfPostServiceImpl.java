@@ -1,6 +1,7 @@
 package com.fancoding.basic.project.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fancoding.basic.project.entity.GfPost;
 import com.fancoding.basic.project.entity.GfPostClassify;
 import com.fancoding.basic.project.entity.GfPostTag;
@@ -93,5 +94,28 @@ public class GfPostServiceImpl extends ServiceImpl<GfPostMapper, GfPost> impleme
         return gfPostMapper.selectList(
                 new QueryWrapper<GfPost>()
                         .eq("author_id", id));
+    }
+
+    /**
+     * 删除帖子
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deletePost(Integer id) {
+        return gfPostMapper.deleteById(id) == 1;
+    }
+
+    /**
+     * 状态修改
+     * @param id
+     * @param status
+     */
+    @Override
+    public boolean changePostStatus(Integer id, Integer status) {
+        return gfPostMapper.update(null,
+                new UpdateWrapper<GfPost>()
+                        .eq("id", id)
+                        .set("status", status)) == 1;
     }
 }

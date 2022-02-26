@@ -33,4 +33,14 @@ public class GfNewsServiceImpl extends ServiceImpl<GfNewsMapper, GfNews> impleme
     public List<GfNews> getNewsOfTheFirstEight() {
         return gfNewsMapper.getNewsOfTheFirstEight();
     }
+
+    /**
+     * 删除公告
+     * @param id
+     * @return
+     */
+    @Override
+    public boolean deleteNews(Integer id) {
+        return gfNewsMapper.deleteById(id) == 1;
+    }
 }

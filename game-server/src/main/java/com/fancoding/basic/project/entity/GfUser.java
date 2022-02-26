@@ -59,4 +59,5 @@ public class GfUser implements Serializable {
     private Integer status;
 
 
+
 }

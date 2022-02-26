@@ -16,4 +16,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGfGameGfGameTypeService extends IService<GfGameGfGameType> {
 
+    /**
+     * 添加分类
+     * @param gfGameGfGameType
+     */
+    void addType(GfGameGfGameType gfGameGfGameType);
 }

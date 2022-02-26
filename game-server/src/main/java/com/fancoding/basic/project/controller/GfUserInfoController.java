@@ -71,9 +71,9 @@ public class GfUserInfoController {
         GfUserInfo gfUserInfoById = gfUserInfoService.getOne(new QueryWrapper<GfUserInfo>().eq("id", gfUserInfoForm.getId()));
         // 用户为 null 则查找失败
         if (gfUserInfoById == null) {
-            return ResultVoUtil.error(ResultEnum.GET_ERROR);
+            return ResultVoUtil.error("该用户不存在");
         }
-        // TODO 判断昵称、邮箱唯一性
+        // 判断昵称、邮箱唯一性
         GfUserInfo gfUserInfo = gfUserInfoForm.buildEntity();
         // 昵称是否修改了
         boolean hasUpdatedByName = false;
@@ -92,6 +92,60 @@ public class GfUserInfoController {
                 return ResultVoUtil.error("邮箱已被绑定");
             }
         }
+        if (gfUserInfoService.updateById(gfUserInfo)) {
+            if (hasUpdatedByName) {
+                //只更新一个属性，把用户表id为信息表uid的用户名称更新为修改的昵称，其他属性不变
+                UpdateWrapper<GfUser> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("id",gfUserInfo.getUid()).set("username", gfUserInfo.getNickname());
+                gfUserService.update(null, updateWrapper);
+            }
+            return ResultVoUtil.success();
+        }else {
+            return ResultVoUtil.error(ResultEnum.UPDATE_ERROR);
+        }
+
+
+    }
+
+    /**
+     * 更新用户信息 -- 后台
+     * @param gfUserInfoForm
+     * @return
+     */
+    @ApiOperation("更新用户信息 -- 后台")
+    @PutMapping("/updateInfo")
+    public ResultVo updateInfo(@Validated @RequestBody GfUserInfoForm gfUserInfoForm) {
+
+        // 通过前台传过来的uid判断是否有这条数据
+        GfUserInfo gfUserInfoByUId =
+                gfUserInfoService.getOne(new QueryWrapper<GfUserInfo>().eq("uid", gfUserInfoForm.getUid()));
+
+        // 用户为 null 则查找失败
+        if (gfUserInfoByUId == null) {
+            return ResultVoUtil.error("该用户不存在");
+        }
+        // 判断昵称、邮箱唯一性
+        GfUserInfo gfUserInfo = gfUserInfoForm.buildEntity();
+        // 昵称是否修改了
+        boolean hasUpdatedByName = false;
+        // 如果昵称修改了
+        if (!gfUserInfo.getNickname().equals(gfUserInfoByUId.getNickname())) {
+            hasUpdatedByName = !hasUpdatedByName;
+            GfUserInfo nickname = gfUserInfoService.getOne(new QueryWrapper<GfUserInfo>().eq("nickname", gfUserInfo.getNickname()));
+            if (nickname != null) {
+                return ResultVoUtil.error("用户昵称已存在");
+            }
+        }
+        // 如果邮箱修改了
+        if (!gfUserInfo.getEmail().equals(gfUserInfoByUId.getEmail())) {
+            GfUserInfo email = gfUserInfoService.getOne(new QueryWrapper<GfUserInfo>().eq("email", gfUserInfo.getEmail()));
+            if (email != null) {
+                return ResultVoUtil.error("邮箱已被绑定");
+            }
+        }
+        gfUserInfo.setId(gfUserInfoByUId.getId());
+        gfUserInfo.setHobby(gfUserInfoByUId.getHobby());
+        gfUserInfo.setWork(gfUserInfoByUId.getWork());
         if (gfUserInfoService.updateById(gfUserInfo)) {
             if (hasUpdatedByName) {
                 //只更新一个属性，把用户表id为信息表uid的用户名称更新为修改的昵称，其他属性不变

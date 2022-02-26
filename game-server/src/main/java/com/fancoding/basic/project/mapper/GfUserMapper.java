@@ -2,7 +2,11 @@ package com.fancoding.basic.project.mapper;
 
 import com.fancoding.basic.project.entity.GfUser;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.fancoding.basic.project.utils.vo.GfUserVo;
+import com.fancoding.basic.project.utils.vo.InfoVo;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * <p>
@@ -15,4 +19,16 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GfUserMapper extends BaseMapper<GfUser> {
 
+    /**
+     * 返回所有用户
+     * @return
+     */
+    List<GfUserVo> getAllUser();
+
+    /**
+     * 个人信息
+     * @param id
+     * @return
+     */
+    InfoVo getGfUserByUserId(String id);
 }
