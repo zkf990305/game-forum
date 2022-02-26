@@ -4,7 +4,6 @@ import { ICON } from "../assets/icon/index";
 const game = {
   state: {
     id: null, // 游戏ID
-
     tempList: {} // 信息
   },
   getters: {
