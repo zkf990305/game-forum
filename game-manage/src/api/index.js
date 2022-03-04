@@ -41,8 +41,21 @@ const HttpManager = {
   // 获取全部游戏类型列表
   getAllGameTypes: () => get(`gf-game-type/typeList`),
 
+  // 添加游戏分类
+  setGameType: data => post(`gf-game-type/addGameType`, data),
+
+  // 删除游戏分类
+  deleteGameType: id => deletes(`gf-game-type/deleteGameType/` + id),
+
+  // 批量删除 游戏分类
+  removeBatchOfGameType: data => post(`gf-game-type/removeBatch`, data),
+
+  // 更新游戏分类信息
+  updateGameType: params => put(`gf-game-type/update`, params),
+
   // 返回所有游戏
   getAllGame: () => get(`gf-game/gameList`),
+
   // 添加游戏
   setGame: data => post(`gf-game/addGame`, data),
 
@@ -67,6 +80,37 @@ const HttpManager = {
 
   // 状态修改
   changePostStatus: data => post(`gf-post/changePostStatus`, data),
+
+  // 获取全部帖子分类
+  getAllPostClassify: () => get(`gf-post-classify/postClassifyList`),
+
+  // 添加帖子分类
+  setPostClassify: data => post(`gf-post-classify/addPostClassify`, data),
+
+  // 删除帖子分类
+  deletePostClassify: id =>
+    deletes(`gf-post-classify/deletePostClassify/` + id),
+
+  // 批量删除 帖子分类
+  removeBatchOfPostClassify: data => post(`gf-post-classify/removeBatch`, data),
+
+  // 更新帖子分类信息
+  updatePostClassify: params => put(`gf-post-classify/update`, params),
+
+  // 获取全部帖子标签
+  getAllPostTag: () => get(`gf-post-tag/tagList`),
+
+  // 添加帖子标签
+  setPostTag: data => post(`gf-post-tag/addPostTag`, data),
+
+  // 删除帖子标签
+  deletePostTag: id => deletes(`gf-post-tag/deletePostTag/` + id),
+
+  // 批量删除 帖子标签
+  removeBatchOfPostTag: data => post(`gf-post-tag/removeBatch`, data),
+
+  // 更新帖子标签信息
+  updatePostTag: params => put(`gf-post-tag/update`, params),
 
   // =======================> 友情链接 API
   // 返回所有友链
@@ -100,12 +144,22 @@ const HttpManager = {
   // 批量删除公告
   removeBatchOfNews: data => post(`gf-news/removeBatch`, data),
 
-  // =======================> 收藏列表 API
-  // 返回的指定用户ID收藏列表
-  getCollectionOfUser: userId => get(`collection/detail?userId=${userId}`),
-  // 删除收藏的歌曲
-  deleteCollection: (userId, songId) =>
-    get(`/collection/delete?userId=${userId}&&songId=${songId}`),
+  // =======================> 留言 API
+  // 返回所有留言
+  getAllMessage: () => get(`gf-message/messageList`),
+
+  // 添加留言
+  // setMessage: data => post(`gf-message/addMessage`, data),
+
+  // 删除留言
+  deleteMessage: id => deletes(`gf-message/deleteMessage/` + id),
+
+  // // =======================> 收藏列表 API
+  // // 返回的指定用户ID收藏列表
+  // getCollectionOfUser: userId => get(`collection/detail?userId=${userId}`),
+  // // 删除收藏的歌曲
+  // deleteCollection: (userId, songId) =>
+  //   get(`/collection/delete?userId=${userId}&&songId=${songId}`),
 
   // =======================> 评论列表 API
 

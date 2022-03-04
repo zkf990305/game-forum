@@ -54,6 +54,9 @@ export default {
     // 用户名下拉菜单选择事件
     handleCommand(command) {
       if (command === "loginout") {
+        this.$store.commit("setUserId", null);
+        this.$store.commit("setUsername", null);
+        this.$store.commit("setAvatar", null);
         this.$store.commit("setLoginIn", false);
         this.$router.push("/");
       }

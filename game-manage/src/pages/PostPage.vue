@@ -3,7 +3,7 @@
     <div class="container">
       <div class="handle-box">
         <el-button
-          type="primary"
+          type="danger"
           size="mini"
           class="handle-del mr10"
           @click="delAll"
@@ -45,6 +45,14 @@
           width="40"
           align="center"
         ></el-table-column>
+        <el-table-column
+          label="ID"
+          prop="id"
+          sortable
+          width="120"
+          align="center"
+        >
+        </el-table-column>
         <el-table-column
           label="帖子标题"
           prop="title"
@@ -112,7 +120,7 @@
           align="center"
         ></el-table-column>
 
-        <el-table-column label="操作" width="150" align="center">
+        <el-table-column label="操作" fixed="right" width="150" align="center">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.row)"
               >详情</el-button

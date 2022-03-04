@@ -3,13 +3,6 @@
     <div class="container">
       <div class="handle-box">
         <el-button
-          type="danger"
-          size="mini"
-          class="handle-del mr10"
-          @click="delAll"
-          >批量删除</el-button
-        >
-        <el-button
           type="primary"
           size="mini"
           icon="document"
@@ -20,15 +13,9 @@
         <el-input
           v-model="select_word"
           size="mini"
-          placeholder="筛选相关公告"
+          placeholder="筛选相关留言"
           class="handle-input mr10"
         ></el-input>
-        <el-button
-          type="primary"
-          size="mini"
-          @click="centerDialogVisible = true"
-          >发布公告</el-button
-        >
       </div>
       <el-table
         :data="data"
@@ -48,55 +35,30 @@
           label="ID"
           prop="id"
           sortable
-          width="80"
+          width="300"
           align="center"
         ></el-table-column>
         <el-table-column
-          label="标题"
-          prop="title"
-          width="120"
+          label="留言人姓名"
+          prop="name"
+          width="300"
           align="center"
         ></el-table-column>
         <el-table-column
-          label="发布时间"
-          prop="createtime"
-          width="120"
+          label="手机号"
+          prop="phone"
+          width="300"
           align="center"
         ></el-table-column>
         <el-table-column
-          label="最后一次修改时间"
-          prop="gmtUpdatetime"
-          width="120"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          label="作者id"
-          prop="authorId"
-          width="120"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          label="作者名字"
-          prop="authorName"
-          width="100"
+          label="留言内容"
+          prop="content"
+          width="300"
           align="center"
         ></el-table-column>
 
-        <el-table-column label="用户头像" width="160" align="center">
+        <el-table-column label="操作" fixed="right" width="160" align="center">
           <template slot-scope="scope">
-            <img
-              :src="getUrl(scope.row.authorAvatar)"
-              alt=""
-              style="width: 80px;"
-            />
-          </template>
-        </el-table-column>
-
-        <el-table-column label="操作" width="160" align="center">
-          <template slot-scope="scope">
-            <el-button size="mini" type="success" @click="handleEdit(scope.row)"
-              >编辑</el-button
-            >
             <el-button
               size="mini"
               type="danger"
@@ -118,62 +80,6 @@
         </el-pagination>
       </div>
     </div>
-
-    <!--发布公告-->
-    <el-dialog
-      title="发布公告"
-      :visible.sync="centerDialogVisible"
-      width="1400px"
-      height="1550px"
-      center
-      @opened="load()"
-    >
-      <el-form
-        :model="registerForm"
-        status-icon
-        :rules="rules"
-        ref="registerForm"
-        label-width="70px"
-        class="demo-ruleForm"
-      >
-        <el-form-item label="标题" prop="title" size="mini">
-          <el-input v-model="registerForm.title" placeholder="标题"></el-input>
-        </el-form-item>
-      </el-form>
-      <div id="div1"></div>
-      <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="centerDialogVisible = false"
-          >取 消</el-button
-        >
-        <el-button type="primary" size="mini" @click="addPeople"
-          >确 定</el-button
-        >
-      </span>
-    </el-dialog>
-
-    <!-- 编辑弹出框 -->
-    <el-dialog
-      title="编辑"
-      :visible.sync="editVisible"
-      width="1400px"
-      height="1550px"
-      @opened="load1()"
-    >
-      <el-form :rules="UpdateRules" ref="form" :model="form" label-width="60px">
-        <el-form-item label="标题" size="mini" prop="title">
-          <el-input v-model="form.title"></el-input>
-        </el-form-item>
-      </el-form>
-      <div id="div2">
-        <div v-html="form.content"></div>
-      </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="editVisible = false">取 消</el-button>
-        <el-button type="primary" size="mini" @click="saveEdit"
-          >确 定</el-button
-        >
-      </span>
-    </el-dialog>
 
     <!-- 删除提示框 -->
     <el-dialog title="提示" :visible.sync="delVisible" width="300px" center>
@@ -199,7 +105,7 @@ import { HttpManager } from "../api/index";
 let editor;
 // let editor;
 export default {
-  name: "news-page",
+  name: "message-page",
   mixins: [mixin],
   BASE_URL: [BASE_URL],
   data() {
@@ -237,7 +143,7 @@ export default {
       tempDate: [], // 记录用户信息，用于搜索时能临时记录一份用户信息
       is_search: false,
       multipleSelection: [], // 记录要删除的用户信息
-      centerDialogVisible: false,
+      // centerDialogVisible: false,
       editVisible: false, // 显示编辑框
       delVisible: false, // 显示删除框
       select_word: "", // 记录输入框输入的内容
@@ -265,7 +171,7 @@ export default {
       } else {
         this.tableData = [];
         for (let item of this.tempDate) {
-          if (item.title.includes(this.select_word)) {
+          if (item.name.includes(this.select_word)) {
             this.tableData.push(item);
           }
         }
@@ -281,47 +187,17 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
     },
-    uploadUrl(id) {
-      return `${this.$store.state.configure.HOST}/gf-user/upload/avatar/update?id=${id}`;
-      // return `${this.$store.state.HOST}/user/avatar/update?id=${id}`;
-    },
-    handleAvatarSuccess(res, file) {
-      if (res.code === 0) {
-        // this.imageUrl = URL.createObjectURL(file.raw);
-        this.getData();
-        this.$message({
-          message: "修改成功",
-          type: "success"
-        });
-        // this.$router.push("/Consumer");
-      } else {
-        this.notify(res.message, "error");
-      }
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 10;
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 10MB!");
-      }
-      return isJPG && isLt2M;
-    },
-    // 获取公告信息
+
+    // 获取留言信息
     getData() {
       this.tableData = [];
       this.tempDate = [];
-      HttpManager.getAllNews().then(res => {
+      HttpManager.getAllMessage().then(res => {
         this.tableData = res.data;
         this.tempDate = res.data;
         this.currentPage = 1;
       });
     },
-    // getCollect(id) {
-    //   this.$router.push({ path: "/collect", query: { id } });
-    // },
     load() {
       editor = new E("#div1");
       editor.config.zIndex = 5;
@@ -411,75 +287,10 @@ export default {
 
       editor.create();
     },
-    // 添加公告
-    addPeople() {
-      let _this = this;
-
-      this.$refs["registerForm"].validate(valid => {
-        if (valid) {
-          this.registerForm.content = editor.txt.html();
-          this.registerForm.authorId = this.userId;
-          this.registerForm.authorName = this.username;
-          this.registerForm.authorAvatar = this.avatar;
-
-          HttpManager.setNews(this.registerForm)
-            .then(res => {
-              if (res.code === 0) {
-                _this.notify("发布成功", "success");
-                this.centerDialogVisible = false;
-                _this.getData();
-              } else {
-                _this.notify(res.message, "error");
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        }
-      });
-    },
-    // 编辑
-    handleEdit(row) {
-      this.idx = row.id;
-      this.form = {
-        id: row.id,
-        title: row.title,
-        content: row.content
-      };
-      this.editVisible = true;
-    },
-    // 保存编辑
-    saveEdit() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          this.form.content = editor.txt.html();
-          HttpManager.updateNewsMsg(this.form)
-            .then(res => {
-              if (res.code === 0) {
-                this.getData();
-                this.$notify.success({
-                  title: "编辑成功",
-                  showClose: true
-                });
-              } else {
-                this.$notify.error({
-                  title: res.message,
-                  showClose: true
-                });
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        }
-      });
-
-      this.editVisible = false;
-    },
 
     // 确定删除
     deleteRow() {
-      HttpManager.deleteNews(this.idx)
+      HttpManager.deleteMessage(this.idx)
         .then(res => {
           if (res.code === 0) {
             this.getData();
@@ -491,29 +302,6 @@ export default {
         .catch(failResponse => {});
       this.delVisible = false;
     },
-    delAll() {
-      var ids = new Array();
-      if (this.multipleSelection.length == 0)
-        this.$message.error("请先至少选择一项");
-      else {
-        this.multipleSelection.forEach(element => {
-          ids.push(element.id);
-        });
-
-        this.$confirm("确定要删除选中的文件吗?", "提示")
-          .then(() => {
-            HttpManager.removeBatchOfNews(ids).then(res => {
-              if (res.code === 0) {
-                this.getData();
-                this.notify("删除成功", "success");
-              } else {
-                this.notify("删除失败", "success");
-              }
-            });
-          })
-          .catch(() => {});
-      }
-    },
 
     exportToExcel() {
       //excel数据导出
@@ -521,25 +309,11 @@ export default {
         const {
           export_json_to_excel
         } = require("@/assets/js/excel/Export2Excel");
-        const tHeader = [
-          "标题",
-          "内容",
-          "发布时间",
-          "最后一次修改时间",
-          "作者id",
-          "作者名字"
-        ];
-        const filterVal = [
-          "title",
-          "content",
-          "createtime",
-          "gmtUpdatetime",
-          "authorId",
-          "authorName"
-        ];
+        const tHeader = ["留言人姓名", "手机号", "留言内容"];
+        const filterVal = ["name", "phone", "content"];
         const list = this.multipleSelection;
         const data = this.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, "公告信息导出excel");
+        export_json_to_excel(tHeader, data, "留言信息导出excel");
       });
     },
     formatJson(filterVal, jsonData) {

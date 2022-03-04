@@ -2,7 +2,8 @@ const user = {
   state: {
     userId: "",
     username: "",
-    avatar: ""
+    avatar: "",
+    userRole: ""
   },
   getters: {
     userId: state => {
@@ -25,6 +26,13 @@ const user = {
         avatar = JSON.parse(window.localStorage.getItem("avatar") || null);
       }
       return avatar;
+    },
+    userRole: state => {
+      let userRole = state.userRole;
+      if (!userRole) {
+        userRole = JSON.parse(window.localStorage.getItem("userRole") || null);
+      }
+      return userRole;
     }
   },
   mutations: {
@@ -39,6 +47,10 @@ const user = {
     setAvatar: (state, avatar) => {
       state.avatar = avatar;
       window.localStorage.setItem("avatar", JSON.stringify(avatar));
+    },
+    setUserRole: (state, userRole) => {
+      state.userRole = userRole;
+      window.localStorage.setItem("userRole", JSON.stringify(userRole));
     }
   },
   actions: {}

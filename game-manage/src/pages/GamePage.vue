@@ -3,7 +3,7 @@
     <div class="container">
       <div class="handle-box">
         <el-button
-          type="primary"
+          type="danger"
           size="mini"
           class="handle-del mr10"
           @click="delAll"
@@ -42,6 +42,13 @@
         <el-table-column
           type="selection"
           width="40"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          label="ID"
+          prop="id"
+          width="80"
+          sortable
           align="center"
         ></el-table-column>
         <el-table-column
@@ -92,9 +99,9 @@
           </template>
         </el-table-column>
 
-        <el-table-column label="操作" width="150" align="center">
+        <el-table-column label="操作" fixed="right" width="150" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" @click="handleEdit(scope.row)"
+            <el-button size="mini" type="success" @click="handleEdit(scope.row)"
               >编辑</el-button
             >
             <el-button

@@ -25,17 +25,21 @@ new Vue({
   render: h => h(App)
 });
 
-// router.beforeEach((to, from, next) => {
-//   if (to.matched.some(m => m.meta.requireAuth)) {
-//     // 对路由进行验证
-//     if (mapGetters.state.loginIn) {
-//       // 已经登陆
-//       next(); // 正常跳转到你设置好的页面
-//     } else {
-//       // 未登录则跳转到登陆界面
-//       next({ path: "/" });
-//     }
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(m => m.meta.title)) {
+    console.log(store.modules.configure.state.loginIn + "---- token ");
+    // 对路由进行验证
+    if (store.modules.configure.state.loginIn) {
+      // 已经登陆
+      next(); // 正常跳转到你设置好的页面
+    } else {
+      // 未登录则跳转到登陆界面
+      next({
+        path: "/",
+        query: { redirect: to.fullPath } // 将跳转的路由path作为参数，登录成功后跳转到该路由
+      });
+    }
+  } else {
+    next();
+  }
+});

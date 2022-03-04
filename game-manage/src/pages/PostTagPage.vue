@@ -1,12 +1,5 @@
 <template>
   <div class="table">
-    <div class="crumbs">
-      <el-breadcrumb separator="/">
-        <el-breadcrumb-item>
-          <i class="el-icon-tickets"></i> 评论信息
-        </el-breadcrumb-item>
-      </el-breadcrumb>
-    </div>
     <div class="container">
       <div class="handle-box">
         <el-button
@@ -27,9 +20,15 @@
         <el-input
           v-model="select_word"
           size="mini"
-          placeholder="筛选相关评论内容信息"
+          placeholder="筛选相关帖子标签信息"
           class="handle-input mr10"
         ></el-input>
+        <el-button
+          type="primary"
+          size="mini"
+          @click="centerDialogVisible = true"
+          >添加帖子标签</el-button
+        >
       </div>
       <el-table
         :data="data"
@@ -37,9 +36,8 @@
         size="mini"
         style="width: 100%"
         ref="multipleTable"
-        max-height="650"
+        max-height="450"
         @selection-change="handleSelectionChange"
-        :default-sort="{ prop: 'status' }"
       >
         <el-table-column
           type="selection"
@@ -50,77 +48,22 @@
           label="ID"
           prop="id"
           sortable
-          width="120"
+          width="80"
           align="center"
         >
         </el-table-column>
         <el-table-column
-          label="评论者编号"
-          prop="uid"
-          width="240"
+          label="帖子标签名称"
+          prop="tag"
+          width="150"
           align="center"
         >
-        </el-table-column>
-        <el-table-column
-          label="评论内容"
-          prop="content"
-          width="240"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-popover trigger="hover" placement="top">
-              <p>评论内容: {{ scope.row.content }}</p>
-              <div slot="reference" class="name-wrapper">
-                <i class="el-icon-tickets"></i>
-                <el-tag size="medium">{{ scope.row.content }}</el-tag>
-              </div>
-            </el-popover>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="评论时间"
-          prop="gmtCreate"
-          width="240"
-          align="center"
-        ></el-table-column>
-        <el-table-column
-          label="是否被点赞"
-          prop="like"
-          width="120"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <div v-if="scope.row.like > 0">
-              <el-tag>已点赞</el-tag>
-            </div>
-            <div v-else-if="scope.row.like === 0">
-              <el-tag type="danger">未点赞</el-tag>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="状态"
-          width="120"
-          prop="status"
-          align="center"
-          sortable
-        >
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="1"
-              :inactive-value="0"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              @change="handleStatusChange(scope.row)"
-            ></el-switch>
-          </template>
         </el-table-column>
 
         <el-table-column label="操作" width="150" align="center">
           <template slot-scope="scope">
-            <el-button type="success" size="mini" @click="handleEdit(scope.row)"
-              >详情</el-button
+            <el-button size="mini" type="success" @click="handleEdit(scope.row)"
+              >编辑</el-button
             >
             <el-button
               size="mini"
@@ -144,9 +87,55 @@
       </div>
     </div>
 
+    <!--添加帖子标签-->
+    <el-dialog
+      title="添加帖子标签信息"
+      :visible.sync="centerDialogVisible"
+      width="440px"
+      height="1550px"
+      center
+    >
+      <el-form
+        :model="registerForm"
+        status-icon
+        :rules="rules"
+        ref="registerForm"
+        label-width="70px"
+        class="demo-ruleForm"
+      >
+        <el-form-item label="帖子标签名称" prop="tag" size="mini">
+          <el-input
+            v-model="registerForm.tag"
+            placeholder="帖子标签名称"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="centerDialogVisible = false"
+          >取 消</el-button
+        >
+        <el-button type="primary" size="mini" @click="addPeople"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+
     <!-- 编辑弹出框 -->
-    <el-dialog title="评论" :visible.sync="editVisible">
-      <div v-html="form.content"></div>
+    <el-dialog
+      title="编辑"
+      :visible.sync="editVisible"
+      width="300px"
+      height="200px"
+    >
+      <el-form :rules="UpdateRules" ref="form" :model="form" label-width="60px">
+        <el-form-item label="帖子标签名称" size="mini" prop="tag">
+          <el-input v-model="form.tag"></el-input>
+        </el-form-item>
+      </el-form>
+      <!-- <div id="div2">
+        <div v-html="form.content"></div>
+      </div> -->
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="editVisible = false">取 消</el-button>
         <el-button type="primary" size="mini" @click="saveEdit"
@@ -177,29 +166,29 @@ import { BASE_URL } from "../api/config";
 import { HttpManager } from "../api/index";
 
 export default {
-  name: "comment-page",
+  name: "post-tag-page",
   mixins: [mixin],
   BASE_URL: [BASE_URL],
   data() {
     return {
       registerForm: {},
-      imageUrl: "",
 
       UpdateRules: {
         // 自定义校验规则
-        name: [{ required: true, message: "请输入评论名称", trigger: "blur" }]
+        tag: [
+          { required: true, message: "请输入帖子标签名称", trigger: "blur" }
+        ]
       },
       rules: {
-        name: [{ required: true, message: "请输入评论名称", trigger: "blur" }],
-        website: [
-          { required: true, message: "请输入评论网站", trigger: "blur" }
+        tag: [
+          { required: true, message: "请输入帖子标签名称", trigger: "blur" }
         ]
       },
       tableData: [], // 记录用户信息，用于显示
       tempDate: [], // 记录用户信息，用于搜索时能临时记录一份用户信息
       is_search: false,
       multipleSelection: [], // 记录要删除的用户信息
-      // centerDialogVisible: false,
+      centerDialogVisible: false,
       editVisible: false, // 显示编辑框
       delVisible: false, // 显示删除框
       select_word: "", // 记录输入框输入的内容
@@ -227,7 +216,7 @@ export default {
       } else {
         this.tableData = [];
         for (let item of this.tempDate) {
-          if (item.content.includes(this.select_word)) {
+          if (item.tag.includes(this.select_word)) {
             this.tableData.push(item);
           }
         }
@@ -247,57 +236,80 @@ export default {
       return `${this.$store.state.configure.HOST}/gf-links/upload/avatar/update`;
       // return `${this.$store.state.HOST}/user/avatar/update?id=${id}`;
     },
-    // 获取评论信息
+    // 获取帖子标签信息
     getData() {
       this.tableData = [];
       this.tempDate = [];
-      HttpManager.getAllComment().then(res => {
+      HttpManager.getAllPostTag().then(res => {
         this.tableData = res.data;
         this.tempDate = res.data;
         this.currentPage = 1;
       });
     },
-    // 角色状态修改
-    handleStatusChange(row) {
-      let text = row.status === 1 ? "审核" : "停用";
-      this.$confirm("确认要" + text + "评论吗？", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          var formData = {};
-          formData.id = row.id;
-          formData.status = row.status;
-          HttpManager.changeCommentStatus(formData).then(res => {
-            if (res.code === 0) {
-              this.notify(text + "成功", "success");
-            } else {
-              this.notify(text + "失败", "error");
-            }
-          });
-        })
-        .catch(() => {
-          row.status = row.status === 0 ? 1 : 0;
-        });
-    },
 
+    // 添加帖子标签
+    addPeople() {
+      let _this = this;
+
+      this.$refs["registerForm"].validate(valid => {
+        if (valid) {
+          HttpManager.setPostTag(this.registerForm)
+            .then(res => {
+              if (res.code === 0) {
+                _this.notify("添加成功", "success");
+                this.centerDialogVisible = false;
+                this.registerForm = {};
+                _this.getData();
+              } else {
+                _this.notify(res.message, "error");
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
+    },
     // 编辑
     handleEdit(row) {
       this.idx = row.id;
       this.form = {
-        content: row.content
+        id: row.id,
+        tag: row.tag
       };
       this.editVisible = true;
     },
     // 保存编辑
     saveEdit() {
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          HttpManager.updatePostTag(this.form)
+            .then(res => {
+              if (res.code === 0) {
+                this.getData();
+                this.$notify.success({
+                  title: "修改标签成功",
+                  showClose: true
+                });
+              } else {
+                this.$notify.error({
+                  title: res.message,
+                  showClose: true
+                });
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
+
       this.editVisible = false;
     },
 
     // 确定删除
     deleteRow() {
-      HttpManager.deleteComment(this.idx)
+      HttpManager.deletePostTag(this.idx)
         .then(res => {
           if (res.code === 0) {
             this.getData();
@@ -320,7 +332,7 @@ export default {
 
         this.$confirm("确定要删除选中的文件吗?", "提示")
           .then(() => {
-            HttpManager.removeBatchOfComment(ids).then(res => {
+            HttpManager.removeBatchOfPostTag(ids).then(res => {
               if (res.code === 0) {
                 this.getData();
                 this.notify("删除成功", "success");
@@ -332,22 +344,6 @@ export default {
           .catch(() => {});
       }
     },
-    // 上传
-    handleAvatarSuccess(res, file) {
-      this.imageUrl = res.data;
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
-    },
 
     exportToExcel() {
       //excel数据导出
@@ -355,11 +351,11 @@ export default {
         const {
           export_json_to_excel
         } = require("@/assets/js/excel/Export2Excel");
-        const tHeader = ["评论Id", "评论者编号", "评论内容", "评论时间"];
-        const filterVal = ["id", "uid", "content", "gmtCreate"];
+        const tHeader = ["帖子标签Id", "帖子标签名称"];
+        const filterVal = ["id", "tag"];
         const list = this.multipleSelection;
         const data = this.formatJson(filterVal, list);
-        export_json_to_excel(tHeader, data, "评论信息导出excel");
+        export_json_to_excel(tHeader, data, "帖子标签信息导出excel");
       });
     },
     formatJson(filterVal, jsonData) {

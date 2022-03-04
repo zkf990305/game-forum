@@ -231,9 +231,10 @@ export default {
         username: username === undefined ? this.loginForm.username : username,
         password:
           // password === undefined ? this.loginForm.password : decrypt(password),
-          password === undefined ? this.loginForm.password : password,
-        rememberMe: rememberMe === undefined ? false : Boolean(rememberMe)
+          password === undefined ? this.loginForm.password : password
       };
+      this.rememberMe =
+        this.rememberMe === undefined ? false : Boolean(this.rememberMe);
     },
     // 显示密码
     showPwd() {
@@ -314,6 +315,7 @@ export default {
       this.$store.commit("setUserId", item.id);
       this.$store.commit("setUsername", item.username);
       this.$store.commit("setAvatar", item.avatarUrl);
+      this.$store.commit("setUserRole", this.loginForm.role);
     },
     goRetrievePass() {
       let _this = this;

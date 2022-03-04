@@ -4,6 +4,7 @@ const configure = {
   state: {
     HOST: BASE_URL,
     loginIn: false, // 用户是否登录
+
     searchword: "", // 搜索关键词
     showAside: false, // 是否显示侧边栏
     activeName: "", // 歌单类型名
