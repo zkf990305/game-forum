@@ -252,6 +252,9 @@ public class CodeGenerator {
 
         // 游戏评价表
         // getAutoGenerator("gf_game_rank").execute();
+
+        //留言板
+        // getAutoGenerator("gf_message").execute();
     }
 
 }

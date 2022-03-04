@@ -3,6 +3,7 @@ package com.fancoding.basic.project.service;
 import com.fancoding.basic.project.entity.GfPostClassify;
 import com.fancoding.basic.project.entity.GfPostTag;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.fancoding.basic.project.form.gf_post_tag.AddPostTagForm;
 
 import java.util.List;
 
@@ -28,4 +29,24 @@ public interface IGfPostTagService extends IService<GfPostTag> {
      * @return
      */
     List<GfPostTag> getPostTagOfPostId(Integer id);
+
+    /**
+     * 添加分类
+     * @param postTagForm
+     * @return
+     */
+    boolean addPostTag(AddPostTagForm postTagForm);
+
+    /**
+     * 删除帖子标签
+     * @param id
+     */
+    void deletePostTag(Integer id);
+
+    /**
+     * 更新帖子标签信息
+     * @param postTagForm
+     * @return
+     */
+    boolean updatePostTag(AddPostTagForm postTagForm);
 }
