@@ -1,6 +1,27 @@
 <template>
   <div class="game-list">
-    <ul class="game-list-header">
+    <!--  -->
+    <div class="game-list-header">
+      <span>请选择游戏分类：</span>
+      <el-tag>{{ activeName }}</el-tag>
+      <el-select v-model="activeName" placeholder="请选择">
+        <el-option
+          v-for="(item, index) in gameStyle"
+          :key="index"
+          :label="item.type"
+          :value="item.type"
+        >
+        </el-option>
+      </el-select>
+      <el-button
+        type="primary"
+        icon="el-icon-search"
+        @click="handleChangeView(activeName)"
+        >搜索</el-button
+      >
+    </div>
+    <!--  -->
+    <!-- <ul class="game-list-header">
       <li
         v-for="(item, index) in gameStyle"
         :key="index"
@@ -9,7 +30,7 @@
       >
         {{ item.type }}
       </li>
-    </ul>
+    </ul> -->
     <div class="song-content">
       <game-content-list
         :contentList="data"

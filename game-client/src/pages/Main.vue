@@ -1,7 +1,7 @@
 <template>
   <div>
     <the-header />
-
+    <the-aside></the-aside>
     <router-view class="music-content" />
 
     <scroll-top />
@@ -13,12 +13,14 @@
 import ScrollTop from "../components/ScrollTop";
 import TheHeader from "../components/TheHeader";
 import TheFooter from "../components/TheFooter";
+import TheAside from "../components/TheAside";
 
 export default {
   components: {
     ScrollTop,
     TheHeader,
-    TheFooter
+    TheFooter,
+    TheAside
   }
 };
 </script>

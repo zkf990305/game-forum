@@ -22,6 +22,10 @@ const HttpManager = {
   // 获取全部友链
   getLinkList: () => get(`gf-links/linkList`),
 
+  // =======================> 留言 API
+  // 提交留言
+  addMessage: data => post(`gf-message/addMessage`, data),
+
   // =======================> 游戏分类 API
   // 获取全部type
   getGameTypeList: () => get(`gf-game-type/typeList`),

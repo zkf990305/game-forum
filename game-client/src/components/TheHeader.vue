@@ -53,6 +53,11 @@
           ><i class="el-icon-edit"></i> {{ item.name }}</el-button
         >
       </li>
+      <li>
+        <el-button type="danger" round @click="changeAside"
+          ><i class="el-icon-message"></i> 留言</el-button
+        >
+      </li>
     </ul>
     <!--设置-->
     <div class="header-right" v-show="loginIn">
@@ -166,6 +171,11 @@ export default {
         });
         window.open(routeUrl.href, "_blank");
       }
+    },
+    // 点击留言
+    changeAside() {
+      let temp = !this.showAside;
+      this.$store.commit("setShowAside", temp);
     },
     goMenuList(path) {
       if (path === 0) {
