@@ -42,6 +42,10 @@ const postMsg = [
 // 用户下拉菜单项--帖子
 const postMenuList = [
   {
+    name: "首页",
+    path: "/"
+  },
+  {
     name: "帖子管理",
     path: "/"
   },

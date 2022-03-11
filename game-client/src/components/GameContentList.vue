@@ -16,6 +16,10 @@
           }}</el-link>
 
           <el-divider direction="vertical"></el-divider>
+          <i class="el-icon-top" style="background-color:#F56C6C"></i>评分：{{
+            item.score
+          }}
+          <el-divider direction="vertical"></el-divider>
           <el-link type="success" :href="item.officialWebsite" target="_blank"
             >进入游戏
           </el-link>

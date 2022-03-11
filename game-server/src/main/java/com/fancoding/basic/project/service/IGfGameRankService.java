@@ -33,4 +33,19 @@ public interface IGfGameRankService extends IService<GfGameRank> {
      * @return
      */
     int theNumberOfParticipants(Integer gid);
+
+    /**
+     * 是否有评分过的记录
+     * @param gfGameRank
+     * @return
+     */
+    GfGameRank selectRank(GfGameRank gfGameRank);
+
+    /**
+     * 获取自己对游戏的评分
+     * @param id
+     * @param gid
+     * @return
+     */
+    GfGameRank selectRankOfMe(String id, Integer gid);
 }

@@ -75,7 +75,7 @@ const mixin = {
       if (value === 1) {
         return "超级管理员";
       } else if (value === 2) {
-        return "管理";
+        return "管理员";
       } else if (value === 3) {
         return "普通用户";
       } else {

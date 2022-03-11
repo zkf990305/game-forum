@@ -54,4 +54,30 @@ public class GfGameRankServiceImpl extends ServiceImpl<GfGameRankMapper, GfGameR
                         .eq("gid", gid)
                         .select("COALESCE(count(uid),0) as total"));
     }
+
+    /**
+     * 是否有评价过的记录
+     * @param gfGameRank
+     * @return
+     */
+    @Override
+    public GfGameRank selectRank(GfGameRank gfGameRank) {
+        return gfGameRankMapper.selectOne(
+                new QueryWrapper<GfGameRank>()
+                        .eq("uid", gfGameRank.getUid())
+                        .eq("gid", gfGameRank.getGid()));
+    }
+
+    /**
+     * 获取自己对游戏的评分
+     * @param id
+     * @param gid
+     */
+    @Override
+    public GfGameRank selectRankOfMe(String id, Integer gid) {
+        return getOne(
+                new QueryWrapper<GfGameRank>()
+                        .eq("uid", id)
+                        .eq("gid", gid));
+    }
 }

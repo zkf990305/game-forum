@@ -107,7 +107,7 @@ public class GfPostTagController {
         if(gfPostTagService.updatePostTag(postTagForm)){
             return ResultVoUtil.success();
         }else{
-            return ResultVoUtil.error(ResultEnum.ADD_ERROR);
+            return ResultVoUtil.error(ResultEnum.UPDATE_ERROR);
         }
     }
 

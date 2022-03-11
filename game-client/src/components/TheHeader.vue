@@ -58,6 +58,12 @@
           ><i class="el-icon-message"></i> 留言</el-button
         >
       </li>
+      <li v-show="loginIn && userRole != 3">
+        <el-link href="http://localhost:8081/" target="_blank">
+          <i class="el-icon-monitor"></i>
+          后台管理</el-link
+        >
+      </li>
     </ul>
     <!--设置-->
     <div class="header-right" v-show="loginIn">
@@ -108,7 +114,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userId", "activeName", "avatar", "username", "loginIn"])
+    ...mapGetters([
+      "userId",
+      "activeName",
+      "avatar",
+      "username",
+      "loginIn",
+      "userRole"
+    ])
   },
   mounted() {
     document.querySelector("#user").addEventListener(

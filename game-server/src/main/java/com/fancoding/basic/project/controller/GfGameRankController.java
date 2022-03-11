@@ -2,6 +2,7 @@ package com.fancoding.basic.project.controller;
 
 
 import com.fancoding.basic.project.entity.GfGameRank;
+import com.fancoding.basic.project.enums.ResultEnum;
 import com.fancoding.basic.project.service.IGfGameRankService;
 import com.fancoding.basic.project.utils.ResultVoUtil;
 import com.fancoding.basic.project.utils.vo.ResultVo;
@@ -37,6 +38,15 @@ public class GfGameRankController {
     @ApiOperation("评分")
     @PostMapping("/add")
     public ResultVo addRank(@Validated @RequestBody GfGameRank gfGameRank) {
+        GfGameRank gameRank = gfGameRankService.selectRank(gfGameRank);
+        if(gameRank != null) {
+            gfGameRank.setId(gameRank.getId());
+            if(gfGameRankService.updateById(gfGameRank)){
+                return ResultVoUtil.success("更新成功");
+            }else {
+                return ResultVoUtil.error("评分失败");
+            }
+        }
         boolean res = gfGameRankService.addRank(gfGameRank);
         if (res){
             return ResultVoUtil.success("评分成功");
@@ -67,5 +77,23 @@ public class GfGameRankController {
     public ResultVo theNumberOfParticipants( @PathVariable Integer gid) {
         int res = gfGameRankService.theNumberOfParticipants(gid);
         return ResultVoUtil.success(res);
+    }
+
+    /**
+     * 获取自己对游戏的评分
+     * @param uid
+     * @param gid
+     * @return
+     */
+    @ApiOperation("获取自己对游戏的评分")
+    @GetMapping("/getGameRankOfMe/{uid}/{gid}")
+    public ResultVo getGameRankOfMe(@PathVariable String uid, @PathVariable Integer gid) {
+        GfGameRank gfGameRank = gfGameRankService.selectRankOfMe(uid, gid);
+        if (gfGameRank != null) {
+            return ResultVoUtil.success(gfGameRank.getScore());
+        }else {
+            return ResultVoUtil.error(ResultEnum.GET_ERROR);
+        }
+
     }
 }

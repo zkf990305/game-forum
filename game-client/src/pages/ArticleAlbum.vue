@@ -15,7 +15,7 @@
         </el-avatar>
         <!-- <div style="float: left;"> -->
         <span style="font-weight:bold;float: left;">
-          {{ article.authorName }}
+          <el-link href="" :underline="false">{{ article.authorName }}</el-link>
         </span>
         <div style="float: right;">
           <div v-show="postClassify.length" style="float: left;">分类:</div>

@@ -7,6 +7,7 @@
     <div class="logo">Game 后台管理</div>
     <div class="header-right">
       <div class="header-user-con">
+        <span>{{ changeRole(userRole) }}</span>
         <!-- 用户头像 -->
         <div class="user-avator">
           <img :src="attachImageUrl(avatar)" />
@@ -43,7 +44,14 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userId", "activeName", "avatar", "username", "loginIn"])
+    ...mapGetters([
+      "userId",
+      "activeName",
+      "avatar",
+      "username",
+      "loginIn",
+      "userRole"
+    ])
   },
   mounted() {
     if (document.body.clientWidth < 1500) {

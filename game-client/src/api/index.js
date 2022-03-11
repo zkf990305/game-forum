@@ -102,6 +102,9 @@ const HttpManager = {
   setRank: data => post(`gf-game-rank/add`, data),
   // 获取指定游戏的评分
   getRankOfGameId: gid => get(`gf-game-rank/checkTheTotalScore/` + gid),
+  // 获取自己对游戏的评分
+  getGameRankOfMe: (id, gid) =>
+    get(`gf-game-rank/getGameRankOfMe/` + id + `/` + gid),
 
   // =======================> 点赞 API
   // 查看是否点赞了

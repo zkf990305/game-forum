@@ -3,6 +3,7 @@ package com.fancoding.basic.project.service;
 import com.fancoding.basic.project.entity.GfGame;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.fancoding.basic.project.entity.GfNews;
+import com.fancoding.basic.project.utils.vo.GfGameVo;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface IGfGameService extends IService<GfGame> {
      * 获取前8条游戏
      * @return
      */
-    List<GfGame> getNewsOfTheFirstEight();
+    List<GfGameVo> getNewsOfTheFirstEight();
 
     /**
      * 按游戏名模糊查询游戏列表
@@ -56,4 +57,10 @@ public interface IGfGameService extends IService<GfGame> {
      * @return
      */
     int addGame(GfGame gfGame);
+
+    /**
+     * 查看所有游戏
+     * @return
+     */
+    List<GfGameVo> getGameList();
 }

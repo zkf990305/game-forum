@@ -6,6 +6,7 @@ import com.fancoding.basic.project.entity.GfNews;
 import com.fancoding.basic.project.mapper.GfGameMapper;
 import com.fancoding.basic.project.service.IGfGameService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fancoding.basic.project.utils.vo.GfGameVo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,7 @@ public class GfGameServiceImpl extends ServiceImpl<GfGameMapper, GfGame> impleme
     }
 
     @Override
-    public List<GfGame> getNewsOfTheFirstEight() {
+    public List<GfGameVo> getNewsOfTheFirstEight() {
         return gfGameMapper.getNewsOfTheFirstEight();
     }
 
@@ -71,5 +72,10 @@ public class GfGameServiceImpl extends ServiceImpl<GfGameMapper, GfGame> impleme
     @Override
     public int addGame(GfGame gfGame) {
         return gfGameMapper.insert(gfGame);
+    }
+
+    @Override
+    public List<GfGameVo> getGameList() {
+        return gfGameMapper.getGameList();
     }
 }

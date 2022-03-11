@@ -16,6 +16,7 @@ import com.fancoding.basic.project.service.IGfGameGfGameTypeService;
 import com.fancoding.basic.project.service.IGfGameService;
 import com.fancoding.basic.project.service.IGfGameTypeService;
 import com.fancoding.basic.project.utils.ResultVoUtil;
+import com.fancoding.basic.project.utils.vo.GfGameVo;
 import com.fancoding.basic.project.utils.vo.ResultVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -58,7 +59,8 @@ public class GfGameController {
     @ApiOperation("获取全部游戏列表")
     @GetMapping("/gameList")
     public ResultVo gameLists() {
-        List<GfGame> list = gfGameService.list();
+
+        List<GfGameVo> list = gfGameService.getGameList();
         return ResultVoUtil.success(list);
     }
 
@@ -69,7 +71,7 @@ public class GfGameController {
     @ApiOperation("获取前8条游戏")
     @GetMapping("/gameList8")
     public ResultVo gameListOfTheFirstEight() {
-        List<GfGame> list = gfGameService.getNewsOfTheFirstEight();
+        List<GfGameVo> list = gfGameService.getNewsOfTheFirstEight();
         return ResultVoUtil.success(list);
     }
 

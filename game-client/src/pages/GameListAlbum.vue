@@ -82,6 +82,9 @@ export default {
     this.gameId = this.tempList.id; // 给游戏ID赋值
     this.games = this.tempList;
     this.getRank(this.gameId); // 获取评分
+    if (this.loginIn) {
+      this.getRankOfMe(this.userId, this.gameId); //
+    }
   },
   methods: {
     // 获取评分
@@ -90,6 +93,18 @@ export default {
         .then(res => {
           console.log(res);
           this.value5 = res.data / 2;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 获取评分
+    getRankOfMe(id, gid) {
+      HttpManager.getGameRankOfMe(id, gid)
+        .then(res => {
+          if (res.code === 0) {
+            this.value3 = res.data / 2;
+          }
         })
         .catch(err => {
           console.log(err);
@@ -105,7 +120,7 @@ export default {
           .then(res => {
             if (res.code === 0) {
               this.getRank(this.gameId);
-              this.notify("评分成功", "success");
+              this.notify(res.data, "success");
             } else {
               this.notify("评分失败", "error");
             }

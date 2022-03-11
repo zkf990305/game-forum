@@ -141,7 +141,12 @@
           <template slot-scope="scope">
             <div>
               {{ changeRole(scope.row.role) }}
-              <el-button size="mini">更新角色</el-button>
+              <el-button
+                v-show="scope.row.role != 1"
+                size="mini"
+                @click="handEditRoleVisible(scope.row)"
+                >更新角色</el-button
+              >
             </div>
           </template>
         </el-table-column>
@@ -297,6 +302,35 @@
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="editVisible = false">取 消</el-button>
         <el-button type="primary" size="mini" @click="saveEdit"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
+
+    <!-- 编辑弹出框 -->
+    <el-dialog title="修改角色" :visible.sync="editRoleVisible" width="400px">
+      <el-form
+        :rules="UpdateRoleRules"
+        ref="formRole"
+        :model="formRole"
+        label-width="60px"
+      >
+        <el-form-item label="角色名称" size="mini" prop="name">
+          <el-input v-model="formRole.rid" :disabled="true"></el-input>
+        </el-form-item>
+
+        <el-form-item label="更换角色" size="mini" prop="gender">
+          <el-radio-group v-model="formRole.rid">
+            <el-radio :label="2">管理员</el-radio>
+            <el-radio :label="3">普通用户</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="editRoleVisible = false"
+          >取 消</el-button
+        >
+        <el-button type="primary" size="mini" @click="saveRoleEdit"
           >确 定</el-button
         >
       </span>
@@ -485,6 +519,9 @@ export default {
           label: "台湾"
         }
       ],
+      UpdateRoleRules: {
+        rid: { required: true, message: "请先至少选择一项", trigger: "blur" }
+      },
       UpdateRules: {
         // 自定义校验规则
         nickname: [
@@ -565,6 +602,8 @@ export default {
       multipleSelection: [], // 记录要删除的用户信息
       centerDialogVisible: false,
       editVisible: false, // 显示编辑框
+      editRoleVisible: false, // 显示修改角色框
+      formRole: {},
       delVisible: false, // 显示删除框
       select_word: "", // 记录输入框输入的内容
       form: {},
@@ -667,6 +706,13 @@ export default {
         }
       });
     },
+    handEditRoleVisible(row) {
+      this.formRole = {
+        uid: row.uid,
+        rid: row.role
+      };
+      this.editRoleVisible = true;
+    },
     // 编辑
     handleEdit(row) {
       this.idx = row.uid;
@@ -683,7 +729,32 @@ export default {
       };
       this.editVisible = true;
     },
-
+    // 角色权限修改
+    saveRoleEdit() {
+      this.$refs["formRole"].validate(valid => {
+        if (valid) {
+          HttpManager.updateUserRole(this.formRole)
+            .then(res => {
+              if (res.code === 0) {
+                this.getData();
+                this.editRoleVisible = false;
+                this.$notify.success({
+                  title: "修改成功",
+                  showClose: true
+                });
+              } else {
+                this.$notify.error({
+                  title: res.message,
+                  showClose: true
+                });
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
+    },
     // 保存编辑
     saveEdit() {
       this.$refs["form"].validate(valid => {

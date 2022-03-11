@@ -3,6 +3,7 @@ package com.fancoding.basic.project.mapper;
 import com.fancoding.basic.project.entity.GfGame;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fancoding.basic.project.entity.GfNews;
+import com.fancoding.basic.project.utils.vo.GfGameVo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public interface GfGameMapper extends BaseMapper<GfGame> {
      * 获取前8条游戏
      * @return
      */
-    List<GfGame> getNewsOfTheFirstEight();
+    List<GfGameVo> getNewsOfTheFirstEight();
 
     /**
      * 收藏了的游戏
@@ -36,4 +37,10 @@ public interface GfGameMapper extends BaseMapper<GfGame> {
      * @return
      */
     List<GfGame> getGameListOfCollect(String id);
+
+    /**
+     * 获取全部游戏列表
+     * @return
+     */
+    List<GfGameVo> getGameList();
 }

@@ -170,6 +170,7 @@ export default {
       this.$store.commit("setUserId", item.id);
       this.$store.commit("setUsername", item.username);
       this.$store.commit("setAvatar", item.avatarUrl);
+      this.$store.commit("setUserRole", this.loginForm.role);
     },
     goSignUp() {
       this.$router.push({ path: "/sign-up" });

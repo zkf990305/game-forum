@@ -31,12 +31,12 @@
             </div>
           </el-tooltip>
 
-          <el-link
+          <!-- <el-link
             class="navbar"
             href="https://element.eleme.io"
             target="_blank"
             ><i class="el-icon-arrow-left"></i> 帖子管理</el-link
-          >
+          > -->
 
           <!--设置-->
           <div class="header-right" v-show="loginIn">
@@ -296,7 +296,7 @@ export default {
         },
         // 图片上传并返回了结果，但图片插入时出错了
         fail: function(xhr, editor, resData) {
-          console.log("上传失败,原因是", "fail", resData);
+          console.log("显示失败,原因是", "fail", resData);
         },
         // 上传图片出错，一般为 http 请求的错误
         error: function(xhr, editor, resData) {
@@ -315,6 +315,53 @@ export default {
         //   // insertImgFn 可把图片插入到编辑器，传入图片 src ，执行函数即可
         //   insertImgFn(result.data[0]);
         // }
+      };
+
+      // 配置 server 接口地址
+      editor.config.uploadVideoServer = BASE_URL + "/files/editor/upload";
+      // 默认限制视频大小是 1024m ，可以自己修改。// 1024m
+      editor.config.uploadVideoMaxSize = 1 * 1024 * 1024 * 1024;
+      // 超时
+      editor.config.uploadVideoTimeout = 1000 * 60 * 5;
+      // 限制视频上传类型
+      editor.config.uploadVideoAccept = ["mp4"];
+      // 设置上传参数名称
+      editor.config.uploadVideoName = "file";
+      editor.config.uploadVideoHooks = {
+        // 上传视频之前
+        before: function(xhr) {
+          // console.log(xhr);
+          // // 可阻止视频上传
+          // return {
+          //   prevent: true,
+          //   msg: "需要提示给用户的错误信息"
+          // };
+        },
+        // 视频上传并返回了结果，视频插入已成功
+        success: function(xhr) {
+          console.log("success", xhr, "上传成功");
+        },
+        // 视频上传并返回了结果，但视频插入时出错了
+        fail: function(xhr, editor, resData) {
+          console.log("显示失败,原因是", "fail", resData);
+        },
+        // 上传视频出错，一般为 http 请求的错误
+        error: function(xhr, editor, resData) {
+          console.log("error", xhr, resData, "上传出错");
+        },
+        // 上传视频超时
+        timeout: function(xhr) {
+          console.log("timeout", "上传超时");
+        },
+        // 视频上传并返回了结果，想要自己把视频插入到编辑器中
+        // 例如服务器端返回的不是 { errno: 0, data: { url : '.....'} } 这种格式，可使用 customInsert
+        customInsert: function(insertVideoFn, result) {
+          // result 即服务端返回的接口
+          console.log("customInsert", result);
+
+          // insertVideoFn 可把视频插入到编辑器，传入视频 src ，执行函数即可
+          insertVideoFn(result.data[0].url);
+        }
       };
       editor.create();
     },
@@ -361,9 +408,9 @@ export default {
             .then(res => {
               console.log(res);
               if (res.code === 0) {
-                _this.notify("发布成功", "success");
+                _this.notify("发布成功，即将跳转首页", "success");
                 setTimeout(function() {
-                  // _this.$router.push({ path: "/" });
+                  _this.$router.push({ path: "/" });
                 }, 2000);
               } else {
                 _this.notify(res.message, "error");

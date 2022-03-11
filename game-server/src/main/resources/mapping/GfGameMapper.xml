@@ -10,8 +10,10 @@
         where `gf_game_type`.type = #{type}
     </select>
     <select id="getNewsOfTheFirstEight"
-            resultType="com.fancoding.basic.project.entity.GfGame">
-        SELECT * FROM `gf_game`
+            resultType="com.fancoding.basic.project.utils.vo.GfGameVo">
+        SELECT gg.*, SUM(ggr.score) as score FROM gf_game AS gg LEFT JOIN gf_game_rank AS ggr ON gg.id = ggr.gid
+        GROUP BY ggr.gid
+        ORDER BY score DESC
 --         ORDER BY gmt_updatetime DESC
             LIMIT 8;
     </select>
@@ -20,6 +22,12 @@
         select *
         from gf_game gp, gf_post_collect gpc
         where gpc.uid = #{id} and gpc.type = 1 and gpc.collect_id = gp.id;
+    </select>
+    <select id="getGameList"
+            resultType="com.fancoding.basic.project.utils.vo.GfGameVo">
+        SELECT gg.*, SUM(ggr.score) as score FROM gf_game AS gg LEFT JOIN gf_game_rank AS ggr ON gg.id = ggr.gid
+        GROUP BY ggr.gid
+        ORDER BY score DESC;
     </select>
 
 </mapper>

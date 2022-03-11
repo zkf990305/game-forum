@@ -14,6 +14,9 @@ const HttpManager = {
   // 更新用户信息
   updateUserMsg: params => put(`gf-user-info/update`, params),
 
+  // 更新用户权限
+  updateUserRole: params => put(`gf-user-gf-user-role/update`, params),
+
   // 返回指定ID的用户
   getUserOfId: id => get(`user/detail?id=${id}`),
   // 添加用户
