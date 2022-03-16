@@ -94,7 +94,7 @@ public class AddPost implements Serializable {
     /**
      * 类型
      */
-    private GfPostClassify classify;
+    private List<GfPostClassify> classify;
 
     /**
      * 标签

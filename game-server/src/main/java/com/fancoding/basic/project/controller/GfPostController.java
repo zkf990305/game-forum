@@ -8,6 +8,7 @@ import com.fancoding.basic.project.form.gf_post.AddPostForm;
 import com.fancoding.basic.project.form.user.AddUserForm;
 import com.fancoding.basic.project.service.*;
 import com.fancoding.basic.project.utils.ResultVoUtil;
+import com.fancoding.basic.project.utils.UUIDUtils;
 import com.fancoding.basic.project.utils.vo.ResultVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -63,9 +64,9 @@ public class GfPostController {
         gfPost.setGmtUpdate(postForm.getGmtUpdate());
         gfPost.setStatus(postForm.getStatus());
 
-        GfPostClassify classify = postForm.getClassify();
-        GfPostGfPostClassify gfPostGfPostClassify = new GfPostGfPostClassify();
-        gfPostGfPostClassify.setClassifyId(classify.getId());
+        List<GfPostClassify> classify = postForm.getClassify();
+        // GfPostGfPostClassify gfPostGfPostClassify = new GfPostGfPostClassify();
+        // gfPostGfPostClassify.setClassifyId(classify.getId());
 
         List<GfPostTag> tags = postForm.getTags();
 
@@ -74,8 +75,14 @@ public class GfPostController {
             gfPostService.addPost(gfPost);
             // 主键ID会回填
             int pid = gfPost.getId();
-            gfPostGfPostClassify.setPid(pid);
-            gfPostGfPostClassifyService.addClassify(gfPostGfPostClassify);
+            // gfPostGfPostClassify.setPid(pid);
+            // gfPostGfPostClassifyService.addClassify(gfPostGfPostClassify);
+            for (int i = 0; i < classify.size(); i++) {
+                GfPostGfPostClassify gfPostGfPostClassify = new GfPostGfPostClassify();
+                gfPostGfPostClassify.setPid(pid);
+                gfPostGfPostClassify.setClassifyId(classify.get(i).getId());
+                gfPostGfPostClassifyService.addClassify(gfPostGfPostClassify);
+            }
             for (int i = 0; i < tags.size(); i++) {
                 GfPostGfPostTag gfPostGfPostTag = new GfPostGfPostTag();
                 gfPostGfPostTag.setPid(pid);
@@ -89,6 +96,116 @@ public class GfPostController {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultVoUtil.error(ResultEnum.ADD_ERROR);
         }
+    }
+
+    /**
+     * 编辑帖子
+     * @param postForm
+     * @param uid
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @ApiOperation("编辑帖子")
+    @PostMapping("/editPost/{uid}")
+    public ResultVo editPost(@Validated @RequestBody AddPostForm postForm, @PathVariable String uid){
+        System.out.println(postForm);
+        GfPost post = gfPostService.getOne(
+                new QueryWrapper<GfPost>()
+                        .eq("id", postForm.getId()));
+        if (!uid.equals(postForm.getAuthorId())) {
+            return ResultVoUtil.error("禁止非法编辑");
+        }
+        // 更新信息
+        post.setTitle(postForm.getTitle());
+        post.setContent(postForm.getContent());
+        post.setOutline(postForm.getOutline());
+        post.setPhotoUrl(post.getPhotoUrl());
+        // 更新修改时间
+        post.setGmtUpdate(UUIDUtils.getTime().toLocalDateTime());
+
+        // 更新后的帖子分类
+        List<GfPostClassify> classify = postForm.getClassify();
+        // 原先的帖子分类
+        List<GfPostGfPostClassify> gfPostGfPostClassifyList = gfPostGfPostClassifyService.list(
+                new QueryWrapper<GfPostGfPostClassify>()
+                        .eq("pid", post.getId())
+        );
+
+        // 更新后的帖子标签
+        List<GfPostTag> tags = postForm.getTags();
+        List<GfPostGfPostTag> gfPostGfPostTagsList = gfPostGfPostTagService.list(
+                new QueryWrapper<GfPostGfPostTag>()
+                        .eq("pid", post.getId())
+        );
+
+        try {
+            gfPostService.updateById(post);
+
+            // 分类
+            // 添加没有的
+            for (int i = 0; i < classify.size(); i++) {
+                boolean res = false;
+                for (GfPostGfPostClassify gfPostGfPostClassify : gfPostGfPostClassifyList) {
+                    if (classify.get(i).getId().equals(gfPostGfPostClassify.getClassifyId())) {
+                        res = true;
+                    }
+                }
+                if (!res) {
+                    GfPostGfPostClassify gfPostGfPostClassify = new GfPostGfPostClassify();
+                    gfPostGfPostClassify.setPid(post.getId());
+                    gfPostGfPostClassify.setClassifyId(classify.get(i).getId());
+                    gfPostGfPostClassifyService.addClassify(gfPostGfPostClassify);
+                }
+            }
+            // 不存在就删除
+            for (GfPostGfPostClassify gfPostGfPostClassify : gfPostGfPostClassifyList) {
+                boolean res = false;
+                for (int i = 0; i < classify.size(); i++) {
+                    if (classify.get(i).getId().equals(gfPostGfPostClassify.getClassifyId())) {
+                        res = true;
+                    }
+                }
+                if (!res) {
+                    gfPostGfPostClassifyService.removeById(gfPostGfPostClassify);
+                }
+            }
+
+            // 标签
+            // 添加没有的
+            for (int i = 0; i < tags.size(); i++) {
+                boolean res = false;
+                for (GfPostGfPostTag gfPostGfPostTag : gfPostGfPostTagsList) {
+                    if (tags.get(i).getId().equals(gfPostGfPostTag.getTagId())) {
+                        res = true;
+                    }
+                }
+                if (!res) {
+                    GfPostGfPostTag gfPostGfPostTag = new GfPostGfPostTag();
+                    gfPostGfPostTag.setPid(post.getId());
+                    gfPostGfPostTag.setTagId(tags.get(i).getId());
+                    gfPostGfPostTagService.addTags(gfPostGfPostTag);
+                }
+            }
+            // 不存在就删除
+            for (GfPostGfPostTag gfPostGfPostTag : gfPostGfPostTagsList) {
+                boolean res = false;
+                for (int i = 0; i < tags.size(); i++) {
+                    if (tags.get(i).getId().equals(gfPostGfPostTag.getTagId())) {
+                        res = true;
+                    }
+                }
+                if (!res) {
+                    gfPostGfPostTagService.removeById(gfPostGfPostTag);
+                }
+            }
+
+        }catch (Exception e) {
+            System.out.println("操作异常" + e);
+            // controller 中增加事务
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultVoUtil.error(ResultEnum.UPDATE_ERROR);
+        }
+        return ResultVoUtil.success();
     }
 
     /**

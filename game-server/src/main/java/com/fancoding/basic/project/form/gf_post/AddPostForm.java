@@ -1,6 +1,8 @@
 package com.fancoding.basic.project.form.gf_post;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.fancoding.basic.project.entity.*;
 import com.fancoding.basic.project.form.BaseForm;
 import io.swagger.annotations.ApiModel;
@@ -22,6 +24,12 @@ import java.util.List;
 @ApiModel("添加帖子需要的表单数据")
 @EqualsAndHashCode(callSuper = false)
 public class AddPostForm extends BaseForm<AddPost> {
+
+    /**
+     * 自增id 帖子id
+
+     */
+    private Integer id;
 
     /**
      * 帖子标题
@@ -85,7 +93,7 @@ public class AddPostForm extends BaseForm<AddPost> {
      * 类型
      */
     // @NotEmpty(message = "帖子类型不能为空")
-    private GfPostClassify classify = new GfPostClassify();
+    private List<GfPostClassify> classify = new ArrayList();
 
     /**
      * 标签
