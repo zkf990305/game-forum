@@ -175,6 +175,7 @@ export default {
       // });
       // window.open(routeUrl.href, "_blank");
 
+      this.$store.commit("setTempList", null);
       if (!this.loginIn && path === "/md") {
         this.notify("请先登录", "warning");
       } else {

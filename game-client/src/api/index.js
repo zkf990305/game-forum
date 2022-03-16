@@ -60,6 +60,9 @@ const HttpManager = {
   // 查询用户自己发布的帖子列表
   getListPostOfMe: id => get(`gf-post/postList/` + id),
 
+  // 编辑自己的帖子
+  editPost: (id, data) => post("gf-post/editPost/" + id, data),
+
   // =======================> 帖子分类 API
 
   // 获取帖子分类列表

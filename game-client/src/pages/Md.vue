@@ -104,6 +104,7 @@
                   value-key="id"
                   collapse-tags
                   placeholder="请选择"
+                  clearable
                 >
                   <el-option
                     v-for="item in postTag"
@@ -118,8 +119,10 @@
                 <!-- <br /> -->
                 <el-select
                   v-model="postForm.classify"
+                  multiple
                   placeholder="请选择"
                   value-key="id"
+                  collapse-tags
                   size="medium"
                   clearable
                 >
@@ -195,7 +198,9 @@ export default {
       dialogVisible: false,
       postForm: {
         title: "【无标题】",
-        tags: []
+        outline: "",
+        tags: [], // 标签
+        classify: [] //分类
       },
       rules: {
         title: [
@@ -219,7 +224,24 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["userId", "activeName", "avatar", "username", "loginIn"])
+    ...mapGetters([
+      "userId",
+      "activeName",
+      "avatar",
+      "username",
+      "loginIn",
+      "tempList"
+    ])
+  },
+  created() {
+    if (this.tempList) {
+      console.log(this.tempList);
+      this.postForm.id = this.tempList.id;
+      this.postForm.title = this.tempList.title;
+      this.postForm.outline = this.tempList.outline;
+      this.getPostTagOfPostId(this.tempList.id);
+      this.getPostClassifyOfPostId(this.tempList.id);
+    }
   },
   mounted() {
     document.querySelector("#user").addEventListener(
@@ -364,6 +386,33 @@ export default {
         }
       };
       editor.create();
+      if (this.tempList) {
+        editor.txt.text(this.tempList.content);
+      }
+    },
+    // 通过帖子id查找帖子标签
+    getPostTagOfPostId(id) {
+      HttpManager.getPostTagOfPostId(id)
+        .then(res => {
+          if (res.code === 0) {
+            this.postForm.tags = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // 通过帖子id查找帖子分类
+    getPostClassifyOfPostId(id) {
+      HttpManager.getPostClassifyOfPostId(id)
+        .then(res => {
+          if (res.code === 0) {
+            this.postForm.classify = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     // 获取帖子分类列表
     getAllPostClassify() {
@@ -403,22 +452,40 @@ export default {
           this.postForm.gmtUpdate = new Date();
           this.postForm.status = 0;
           console.log(this.postForm);
-          // // 日期格式转
-          HttpManager.addPost(this.postForm)
-            .then(res => {
-              console.log(res);
-              if (res.code === 0) {
-                _this.notify("发布成功，即将跳转首页", "success");
-                setTimeout(function() {
-                  _this.$router.push({ path: "/" });
-                }, 2000);
-              } else {
-                _this.notify(res.message, "error");
-              }
-            })
-            .catch(err => {
-              console.log(err);
-            });
+          if (this.postForm.id) {
+            HttpManager.editPost(this.userId, this.postForm)
+              .then(res => {
+                console.log(res);
+                if (res.code === 0) {
+                  _this.notify("发布成功，即将跳转首页", "success");
+                  setTimeout(function() {
+                    _this.$router.push({ path: "/" });
+                  }, 2000);
+                } else {
+                  _this.notify(res.message, "error");
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          } else {
+            // // 日期格式转
+            HttpManager.addPost(this.postForm)
+              .then(res => {
+                console.log(res);
+                if (res.code === 0) {
+                  _this.notify("发布成功，即将跳转首页", "success");
+                  setTimeout(function() {
+                    _this.$router.push({ path: "/" });
+                  }, 2000);
+                } else {
+                  _this.notify(res.message, "error");
+                }
+              })
+              .catch(err => {
+                console.log(err);
+              });
+          }
         }
       });
     },

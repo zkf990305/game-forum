@@ -218,6 +218,11 @@
                     <template slot-scope="scope">
                       <el-button
                         size="mini"
+                        @click="Edit(scope.$index, scope.row)"
+                        >编辑</el-button
+                      >
+                      <el-button
+                        size="mini"
                         @click="openEdit(scope.$index, scope.row)"
                         >查看</el-button
                       >
@@ -327,6 +332,15 @@ export default {
         }
       });
     },
+    // 编辑
+    Edit(index, row) {
+      this.$store.commit("setTempList", row);
+      let routeUrl = this.$router.resolve({
+        path: `md`
+      });
+      window.open(routeUrl.href, "_blank");
+    },
+    // 查看
     openEdit(index, row) {
       this.$store.commit("setTempList", row);
       let routeUrl = this.$router.resolve({
