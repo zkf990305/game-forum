@@ -148,7 +148,19 @@ export default {
     },
     // 提交评论
     postComment() {
+      if (
+        this.textarea == "undefined" ||
+        this.textarea == null ||
+        this.textarea == ""
+      ) {
+        this.notify("评论内容不能为空", "error");
+        return;
+      }
       if (this.loginIn) {
+        // console.log(this.userId + "---" + this.playId);
+        // if (this.userId == this.playId) {
+        //   this.CommentForm.status = 1;
+        // }
         this.CommentForm.uid = this.userId;
         this.CommentForm.type = this.type;
         this.CommentForm.commentId = this.playId;

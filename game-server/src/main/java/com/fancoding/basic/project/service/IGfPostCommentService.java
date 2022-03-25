@@ -64,4 +64,11 @@ public interface IGfPostCommentService extends IService<GfPostComment> {
      * @return
      */
     boolean changeCommentStatus(Integer id, Integer status);
+
+    /**
+     * 自己发布的帖子下的评论
+     * @param id
+     * @return
+     */
+    List<GfPostComment> selectOfCommentOfMe(String id);
 }

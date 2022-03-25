@@ -148,4 +148,15 @@ public class GfPostCommentController {
         }
 
     }
+
+    /**
+     * 自己发布的帖子下的评论
+     * @return 帖子列表
+     */
+    @ApiOperation("自己发布的帖子下的评论")
+    @GetMapping("/commentList/{id}")
+    public ResultVo listCommentOfMe(@PathVariable String id) {
+        List<GfPostComment> list = gfPostCommentService.selectOfCommentOfMe(id);
+        return ResultVoUtil.success(list);
+    }
 }

@@ -7,8 +7,13 @@ import com.fancoding.basic.project.entity.GfPostComment;
 import com.fancoding.basic.project.mapper.GfPostCommentMapper;
 import com.fancoding.basic.project.service.IGfPostCommentService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fancoding.basic.project.utils.ResultVoUtil;
+import com.fancoding.basic.project.utils.vo.ResultVo;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -105,4 +110,16 @@ public class GfPostCommentServiceImpl extends ServiceImpl<GfPostCommentMapper, G
                         .eq("id", id)
                         .set("status", status)) == 1;
     }
+
+    /**
+     * 自己发布的帖子下的评论
+     * @param id
+     * @return
+     */
+    @Override
+    public List<GfPostComment> selectOfCommentOfMe(String id) {
+        return gfPostCommentMapper.selectOfCommentOfMe(id);
+    }
+
+
 }

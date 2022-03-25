@@ -324,11 +324,11 @@ export default {
           HttpManager.retrievePass(this.passForm)
             .then(res => {
               if (res.code === 0) {
-                this.dialogFormVisible = false;
                 _this.$message({
                   message: "发送成功",
                   type: "success"
                 });
+                this.dialogFormVisible = false;
               } else {
                 _this.notify(res.message, "error");
               }

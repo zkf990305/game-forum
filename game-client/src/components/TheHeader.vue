@@ -73,11 +73,11 @@
 
       <div id="user">
         <!-- 头像 -->
-        <!-- <img :src="attachImageUrl(avatar)" /> -->
+        <img :src="attachImageUrl(avatar)" />
 
-        <el-avatar :size="60" @error="errorHandler">
+        <!-- <el-avatar :size="60" @error="errorHandler">
           <img :src="attachImageUrl(avatar)" />
-        </el-avatar>
+        </el-avatar> -->
       </div>
       <ul class="menu">
         <li

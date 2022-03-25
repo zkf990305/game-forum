@@ -69,7 +69,7 @@ export default {
         {
           icon: "el-icon-tickets",
           index: "comment",
-          role: [1, 2, , 3],
+          role: [1, 2, 3],
           title: "评论管理"
         },
         // 游戏管理

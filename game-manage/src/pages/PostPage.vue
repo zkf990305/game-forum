@@ -97,14 +97,24 @@
           sortable
         >
           <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.status"
-              :active-value="1"
-              :inactive-value="0"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              @change="handleStatusChange(scope.row)"
-            ></el-switch>
+            <div v-if="userRole == 3">
+              <span style="margin-left: 10px" v-if="scope.row.status == 1">
+                <el-tag>已审核</el-tag></span
+              >
+              <span style="margin-left: 10px" v-if="scope.row.status == 0">
+                <el-tag type="info">未审核</el-tag></span
+              >
+            </div>
+            <div v-if="userRole != 3">
+              <el-switch
+                v-model="scope.row.status"
+                :active-value="1"
+                :inactive-value="0"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                @change="handleStatusChange(scope.row)"
+              ></el-switch>
+            </div>
           </template>
         </el-table-column>
         <el-table-column
@@ -221,7 +231,7 @@ export default {
       );
     },
 
-    ...mapGetters(["userId", "avatar", "username", "loginIn"])
+    ...mapGetters(["userId", "avatar", "username", "loginIn", "userRole"])
   },
   watch: {
     select_word: function() {
@@ -254,6 +264,14 @@ export default {
     getData() {
       this.tableData = [];
       this.tempDate = [];
+      if (this.userRole == 3) {
+        HttpManager.getPostOfMe(this.userId).then(res => {
+          this.tableData = res.data;
+          this.tempDate = res.data;
+          this.currentPage = 1;
+        });
+        return;
+      }
       HttpManager.getAllPost().then(res => {
         this.tableData = res.data;
         this.tempDate = res.data;

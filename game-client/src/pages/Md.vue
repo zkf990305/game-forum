@@ -283,6 +283,18 @@ export default {
     errorHandler() {
       return true;
     },
+    goMenuList(path) {
+      if (path === 0) {
+        this.$store.commit("setIsActive", false);
+      }
+      document.querySelector(".menu").classList.remove("show");
+      if (path) {
+        this.$router.push({ path: path });
+      } else {
+        this.$store.commit("setLoginIn", false);
+        this.$router.go(0);
+      }
+    },
     goHome() {
       this.dialogVisible = false;
       this.$router.push({ path: "/" });

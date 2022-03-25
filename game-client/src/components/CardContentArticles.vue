@@ -45,7 +45,7 @@
 <script>
 import mixin from "../mixins";
 import { ICON } from "../assets/icon/index";
-import { formatDate } from "@/utils/date.js";
+import { formatDate } from "../utils/date";
 
 export default {
   name: "card-content-articles",

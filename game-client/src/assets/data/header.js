@@ -47,7 +47,7 @@ const postMenuList = [
   },
   {
     name: "帖子管理",
-    path: "/"
+    path: "/my-homepage"
   },
   {
     name: "退出",

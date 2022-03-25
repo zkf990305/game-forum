@@ -11,4 +11,11 @@
         )
         WHERE gpc.type = #{type} and gpc.comment_id = #{id};
     </update>
+    <select id="selectOfCommentOfMe"
+            resultType="com.fancoding.basic.project.entity.GfPostComment">
+        select * from gf_post_comment
+        where type = 0 and comment_id in (
+            select id from gf_post where author_id = #{id}
+        );
+    </select>
 </mapper>

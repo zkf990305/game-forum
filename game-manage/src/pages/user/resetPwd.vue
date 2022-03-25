@@ -88,11 +88,20 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.form.id = this.userId;
-
+          let _this = this;
           HttpManager.updateUserPwd(this.form).then(res => {
             if (res.code === 0) {
-              this.notify("密码修改成功", "success");
+              this.notify("密码修改成功,请重新登录", "success");
               this.form = {};
+
+              setTimeout(function() {
+                _this.$store.commit("setUserId", null);
+                _this.$store.commit("setUsername", null);
+                _this.$store.commit("setAvatar", null);
+                _this.$store.commit("setLoginIn", false);
+                _this.$store.commit("setUserRole", null);
+                _this.$router.push("/");
+              }, 5000);
             } else {
               this.notify(res.message, "error");
             }

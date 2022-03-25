@@ -102,6 +102,11 @@ public class LoginController {
         if(hasGfUser != null) {
             return ResultVoUtil.error("用户名已存在");
         }
+        // 判断昵称、邮箱唯一性
+        GfUserInfo email = gfUserInfoService.getOne(new QueryWrapper<GfUserInfo>().eq("email", registerGfUserForm.getEmail()));
+        if(email != null) {
+            return ResultVoUtil.error("邮箱已被绑定");
+        }
         // 构建用户对象
         GfUser gfUser = new GfUser();
         gfUser.setUsername(registerGfUserForm.getUsername());
@@ -149,7 +154,6 @@ public class LoginController {
 
         UUIDUtils.print("找回密码：" + retrieveForm.toString());
         GfUserInfo gfUserInfo = gfUserInfoService.selectByEmail(retrieveForm.getEmail());
-        System.out.println(gfUserInfo);
         if(gfUserInfo == null) {
             return ResultVoUtil.error("抱歉！使用此Email用户不存在，不能使用找回密码功能！");
         }

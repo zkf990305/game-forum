@@ -75,6 +75,9 @@ const HttpManager = {
   // 获取全部帖子
   getAllPost: () => get(`gf-post/allPostList`),
 
+  // 获取自己发布的帖子
+  getPostOfMe: id => get(`gf-post/postList/` + id),
+
   // 批量删除帖子
   removeBatchOfPost: data => post(`gf-post/removeBatch`, data),
 
@@ -168,6 +171,9 @@ const HttpManager = {
 
   // 获取全部评论
   getAllComment: () => get(`gf-post-comment/allComment`),
+
+  // 获取自己发布的帖子下的评论
+  getCommentOfMe: id => get(`gf-post-comment/commentList/` + id),
 
   // 批量删除评论
   removeBatchOfComment: data => post(`gf-post-comment/removeBatch`, data),

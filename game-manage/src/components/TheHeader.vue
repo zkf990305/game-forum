@@ -66,6 +66,7 @@ export default {
         this.$store.commit("setUsername", null);
         this.$store.commit("setAvatar", null);
         this.$store.commit("setLoginIn", false);
+        this.$store.commit("setUserRole", null);
         this.$router.push("/");
       }
       if (command === "toProfile") {

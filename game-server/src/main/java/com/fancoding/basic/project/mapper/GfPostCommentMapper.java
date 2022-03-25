@@ -4,6 +4,8 @@ import com.fancoding.basic.project.entity.GfPostComment;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * <p>
  * 帖子/游戏评论表 Mapper 接口
@@ -21,4 +23,11 @@ public interface GfPostCommentMapper extends BaseMapper<GfPostComment> {
      * @return
      */
     boolean updateCommentNumberOfLikes(Integer type, Integer id);
+
+    /**
+     * 自己发布的帖子下的评论
+     * @param id
+     * @return
+     */
+    List<GfPostComment> selectOfCommentOfMe(String id);
 }

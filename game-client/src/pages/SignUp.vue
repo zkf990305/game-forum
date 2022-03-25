@@ -176,9 +176,9 @@ export default {
             .then(res => {
               console.log(res);
               if (res.code === 0) {
-                _this.notify("注册成功", "success");
+                _this.notify("注册成功，可以登录系统！", "success");
                 setTimeout(function() {
-                  _this.$router.push({ path: "/" });
+                  _this.$router.push({ path: "/login-in" });
                 }, 2000);
               } else {
                 _this.notify(res.message, "error");

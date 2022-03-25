@@ -218,7 +218,7 @@ export default {
       );
     },
 
-    ...mapGetters(["userId", "avatar", "username", "loginIn"])
+    ...mapGetters(["userId", "avatar", "username", "loginIn", "userRole"])
   },
   watch: {
     select_word: function() {
@@ -251,6 +251,15 @@ export default {
     getData() {
       this.tableData = [];
       this.tempDate = [];
+
+      if (this.userRole == 3) {
+        HttpManager.getCommentOfMe(this.userId).then(res => {
+          this.tableData = res.data;
+          this.tempDate = res.data;
+          this.currentPage = 1;
+        });
+        return;
+      }
       HttpManager.getAllComment().then(res => {
         this.tableData = res.data;
         this.tempDate = res.data;

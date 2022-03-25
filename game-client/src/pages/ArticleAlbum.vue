@@ -47,7 +47,7 @@
         </el-link>
       </div>
       <div style="float: right">
-        最后更新时间：{{ getDateTime(tempList.gmtUpdatetime) }}
+        最后更新时间：{{ getDateTime(tempList.gmtUpdate) }}
       </div>
       <!-- <br /> -->
       <!-- <el-divider></el-divider> -->
@@ -63,7 +63,7 @@ import mixin from "../mixins";
 import Comment from "../components/Comment";
 import Collect from "../components/Collect";
 import { mapGetters } from "vuex";
-import { formatDate } from "@/utils/date.js";
+import { formatDate } from "../utils/date";
 import { HttpManager } from "../api/index";
 
 export default {
@@ -104,6 +104,9 @@ export default {
     // 时间显示
     getDateTime(item) {
       return formatDate(Date.parse(item));
+    },
+    errorHandler() {
+      return true;
     },
     getPostClassifyOfPostId(id) {
       HttpManager.getPostClassifyOfPostId(id).then(res => {
