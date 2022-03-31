@@ -12,7 +12,7 @@
             {{ tempList.authorName }}
           </span>
           发布于
-          <label> {{ getDateTime(tempList.gmtCreate) }}</label>
+          <label> {{ getDateTime(tempList.createtime) }}</label>
         </div>
       </div>
       <el-card style="line-height: 40px; ">

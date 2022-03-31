@@ -48,7 +48,7 @@
                 {{ tempList.authorName }}
               </span>
               发布于
-              <label> {{ getDateTime(tempList.gmtCreate) }}</label>
+              <label> {{ getDateTime(tempList.createtime) }}</label>
             </div>
           </div>
           <el-card>
@@ -81,7 +81,7 @@ export default {
   data() {
     return {
       newsList: [],
-      pageSize: 3, // 页数
+      pageSize: 6, // 页数
       currentPage: 1, // 当前页
       count: 0, // 点赞数
 

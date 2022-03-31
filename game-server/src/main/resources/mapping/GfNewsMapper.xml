@@ -6,6 +6,6 @@
             resultType="com.fancoding.basic.project.entity.GfNews">
         SELECT * FROM `gf_news`
         ORDER BY gmt_updatetime DESC
-            LIMIT 8;
+            LIMIT 6;
     </select>
 </mapper>

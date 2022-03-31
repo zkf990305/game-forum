@@ -81,6 +81,7 @@
           label="评论时间"
           prop="gmtCreate"
           width="240"
+          sortable
           align="center"
         ></el-table-column>
         <el-table-column

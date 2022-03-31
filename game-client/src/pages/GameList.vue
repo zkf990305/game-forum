@@ -65,7 +65,7 @@ export default {
     return {
       gameStyle: [], // 游戏导航栏类别
       activeName: "全部",
-      pageSize: 2, // 页数
+      pageSize: 4, // 页数
       currentPage: 1, // 当前页
       albumDatas: [] // 歌单
     };

@@ -427,6 +427,8 @@ export default {
               if (res.code === 0) {
                 _this.notify("发布成功", "success");
                 this.centerDialogVisible = false;
+                this.registerForm = {};
+                editor.txt.clear();
                 _this.getData();
               } else {
                 _this.notify(res.message, "error");

@@ -5,7 +5,7 @@
         class="news-content-item"
         v-for="(item, index) in contentList"
         :key="index"
-        style="display: inline;"
+        style="display: inline;margin-top: 10px;"
       >
         <div @click="goAblum(item)">
           <el-link>
@@ -15,9 +15,9 @@
               {{ item.title }}
             </span>
           </el-link>
-          <span style="float:right;cursor: pointer;" class="item-name">
+          <!-- <span style="float:right;cursor: pointer;" class="item-name">
             {{ item.gmtUpdatetime }}
-          </span>
+          </span> -->
         </div>
       </li>
     </ul>
