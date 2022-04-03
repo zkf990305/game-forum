@@ -1,13 +1,19 @@
 <template>
   <div>
-    <div v-for="(i, index) in contentList" :key="index" class="text item">
+    <div v-for="(i, index) in contentList" :key="index">
       <!-- 帖子：
           标题
           概况body-style="padding: 0px 800px 10px 180px"
             style="line-height: 40px;"
           由谁发布 -->
-      <el-card shadow="hover" style="width: 1140px;line-height: 40px;">
+
+      <el-card shadow="hover" style="height: 130px; margin-top:-10px">
         <el-container>
+          <el-aside width="120px">
+            <div class="album-img">
+              <img :src="attachGameImageUrl(i.photoUrl)" alt="" />
+            </div>
+          </el-aside>
           <el-main
             ><div style="float: left;cursor: pointer;" @click="goAblum(i)">
               <h4>{{ i.title }}</h4>
@@ -19,6 +25,7 @@
               @click="goAblum(i)"
             ></div>
             <br />
+            <br />
             <div style="float: left;">
               由
               <span style="font-weight:bold;">
@@ -28,13 +35,16 @@
               <label> {{ getDateTime(i.gmtCreate) }}</label>
             </div></el-main
           >
-          <el-aside width="300px">
-            <div class="album-img">
-              <img :src="attachGameImageUrl(i.photoUrl)" alt="" />
-            </div>
-            <!-- <el-avatar :size="60" @error="errorHandler">
-              <img :src="attachImageUrl(i.photoUrl)" alt="" />
-            </el-avatar> -->
+          <el-aside width="80px">
+            <el-tag v-show="i.isStick == 1" type="warning" effect="dark">
+              精帖
+            </el-tag>
+            <el-tag v-show="i.isStick == 2" type="success" effect="dark"
+              >置顶
+            </el-tag>
+            <el-tag v-show="i.isStick == 3" type="danger" effect="dark"
+              >精 + 顶</el-tag
+            >
           </el-aside>
         </el-container>
       </el-card>
@@ -73,22 +83,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.text {
-  font-size: 14px;
-}
+// .text {
+//   font-size: 14px;
+// }
 
-.item {
-  padding: 5px 0;
-}
+// .item {
+//   padding: 5px 0;
+// }
 
 // 图片
 .album-img {
-  height: 100px;
-  width: 150px;
+  height: 80px;
+  width: 80px;
   display: inline-block;
   position: relative;
   // top: -100px;
-  left: 50px;
+  left: 10px;
   border-radius: 50%;
   // overflow: hidden;
   // border: 5px solid $color-white;

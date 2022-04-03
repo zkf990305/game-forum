@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.fancoding.basic.project.entity.*;
 import com.fancoding.basic.project.enums.ResultEnum;
 import com.fancoding.basic.project.form.gf_post.AddPostForm;
+import com.fancoding.basic.project.form.gf_post.PostStickForm;
+import com.fancoding.basic.project.form.gf_user_gf_user_role.GfUserGfUserRoleForm;
 import com.fancoding.basic.project.form.user.AddUserForm;
 import com.fancoding.basic.project.service.*;
 import com.fancoding.basic.project.utils.ResultVoUtil;
@@ -218,6 +220,63 @@ public class GfPostController {
         List<GfPost> list = gfPostService.listPost();
         return ResultVoUtil.success(list);
     }
+
+    /**
+     * 获取帖子列表-随机八条
+     * @return
+     */
+    @ApiOperation("获取帖子列表-随机八条")
+    @GetMapping("/postList/round")
+    public ResultVo listPostOfRound() {
+        return ResultVoUtil.success(gfPostService.listPostOfRound());
+    }
+
+
+    /**
+     * 获取帖子列表-最新八条
+     * @return
+     */
+    @ApiOperation("获取帖子列表-最新八条")
+    @GetMapping("/postList/uptodate")
+    public ResultVo listPostOfUpToDate() {
+        return ResultVoUtil.success(gfPostService.listPostOfUpToDate());
+    }
+
+    /**
+     * 获取帖子列表-置顶八条
+     * @return
+     */
+    @ApiOperation("获取帖子列表-置顶八条")
+    @GetMapping("/postList/top")
+    public ResultVo listPostOfTop() {
+        return ResultVoUtil.success(gfPostService.listPostOfTop());
+    }
+
+    /**
+     * 获取帖子列表-加精八条
+     * @return
+     */
+    @ApiOperation("获取帖子列表-加精八条")
+    @GetMapping("/postList/refined")
+    public ResultVo listPostOfRefined() {
+        return ResultVoUtil.success(gfPostService.listPostOfRefined());
+    }
+
+    /**
+     * 加精 + 置顶
+     * @param postStickForm
+     * @return
+     */
+    @ApiOperation("加精 + 置顶")
+    @PutMapping("/update")
+    public ResultVo updateStick(@Validated @RequestBody PostStickForm postStickForm) {
+        if(gfPostService.updatesStick(postStickForm)){
+            return ResultVoUtil.success();
+        }else{
+            return ResultVoUtil.error(ResultEnum.UPDATE_ERROR);
+        }
+    }
+
 
     /**
      * 获取全部帖子列表

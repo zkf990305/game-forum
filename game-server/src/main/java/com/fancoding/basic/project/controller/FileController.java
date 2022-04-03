@@ -64,7 +64,7 @@ public class FileController {
         // 把文件写入到上传的路径
         FileUtil.writeBytes(file.getBytes(), rootFilePath);
         // 返回结果 url
-        return ResultVoUtil.success("http://" + ip + ":" + port + "/files/" + flag);
+        return ResultVoUtil.success("http://" + ip + ":" + port + contextPath+ "/files/" + flag);
     }
 
     /**

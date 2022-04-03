@@ -89,6 +89,11 @@ public class GfPost implements Serializable {
     private LocalDateTime gmtUpdate;
 
     /**
+     * 默认0， 1加精，2置顶，3精+顶
+     */
+    private Integer isStick;
+
+    /**
      * 状态0未审核，1审核通过，-1审核不通过
      */
     private Integer status;

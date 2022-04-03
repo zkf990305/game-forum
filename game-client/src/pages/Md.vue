@@ -140,12 +140,14 @@
                 <br />
                 <el-upload
                   class="avatar-uploader"
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  :action="uploadUrl()"
                   :show-file-list="false"
                   :on-success="handleAvatarSuccess"
                   :before-upload="beforeAvatarUpload"
                 >
+                  {{ imageUrl }}
                   <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+
                   <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
                 <label style="color:#909399"
@@ -457,6 +459,7 @@ export default {
       this.$refs["postForm"].validate(valid => {
         if (valid) {
           this.postForm.content = editor.txt.html();
+          this.postForm.photoUrl = this.imageUrl;
           this.postForm.authorId = this.userId;
           this.postForm.authorName = this.username;
           this.postForm.authorAvatar = this.avatar;
@@ -501,9 +504,12 @@ export default {
         }
       });
     },
+    uploadUrl() {
+      return BASE_URL + `/files/upload`;
+    },
     // 上传图片
     handleAvatarSuccess(res, file) {
-      this.imageUrl = URL.createObjectURL(file.raw);
+      this.imageUrl = file.response.data;
     },
     beforeAvatarUpload(file) {
       const isJPG = file.type === "image/jpeg";

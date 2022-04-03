@@ -53,6 +53,51 @@
           align="center"
         >
         </el-table-column>
+
+        <!--  -->
+        <el-table-column
+          label="加精-置顶"
+          width="120"
+          prop="isStick"
+          align="center"
+          sortable
+        >
+          <template slot-scope="scope">
+            <div>
+              <span style="margin-left: 10px" v-if="scope.row.isStick == 0">
+                <el-tag>普通帖子</el-tag></span
+              >
+              <span style="margin-left: 10px" v-if="scope.row.isStick == 1">
+                <el-tag type="warning">加精</el-tag></span
+              >
+              <span style="margin-left: 10px" v-if="scope.row.isStick == 2">
+                <el-tag type="success">置顶</el-tag></span
+              >
+              <span style="margin-left: 10px" v-if="scope.row.isStick == 3">
+                <el-tag type="danger">精 + 顶</el-tag></span
+              >
+            </div>
+            <div v-if="userRole != 3">
+              <el-button
+                type="primary"
+                icon="el-icon-edit"
+                size="mini"
+                @click="isStickEdit(scope.row)"
+                >修改状态</el-button
+              >
+
+              <!-- <el-switch
+                v-model="scope.row.isStick"
+                :active-value="1"
+                :inactive-value="0"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                @change="handleStatusChange(scope.row)"
+              ></el-switch> -->
+            </div>
+          </template>
+        </el-table-column>
+        <!--  -->
         <el-table-column
           label="帖子标题"
           prop="title"
@@ -122,12 +167,14 @@
           prop="gmtCreate"
           width="120"
           align="center"
+          sortable
         ></el-table-column>
         <el-table-column
           label="最后修改时间"
           prop="gmtUpdate"
           width="120"
           align="center"
+          sortable
         ></el-table-column>
 
         <el-table-column label="操作" fixed="right" width="150" align="center">
@@ -180,6 +227,41 @@
         >
       </span>
     </el-dialog>
+
+    <!-- 编辑弹出框 -->
+    <el-dialog
+      title="是否加精-置顶"
+      :visible.sync="editStickVisible"
+      width="400px"
+    >
+      <el-form
+        :rules="UpdateStick"
+        ref="formStick"
+        :model="formStick"
+        label-width="60px"
+      >
+        <el-form-item label="帖子状态" size="mini" prop="name">
+          <el-input v-model="formStick.isStick" :disabled="true"></el-input>
+        </el-form-item>
+
+        <el-form-item label="加精-置顶" size="mini" prop="isStick">
+          <el-radio-group v-model="formStick.isStick">
+            <el-radio :label="0">普通帖子</el-radio>
+            <el-radio :label="1">精华帖子</el-radio>
+            <el-radio :label="2">置顶</el-radio>
+            <el-radio :label="3">精 + 顶</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="editStickVisible = false"
+          >取 消</el-button
+        >
+        <el-button type="primary" size="mini" @click="saveStickEdit"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -208,6 +290,9 @@ export default {
           { required: true, message: "请输入帖子网站", trigger: "blur" }
         ]
       },
+      UpdateStick: {
+        rid: { required: true, message: "请先至少选择一项", trigger: "blur" }
+      },
       tableData: [], // 记录用户信息，用于显示
       tempDate: [], // 记录用户信息，用于搜索时能临时记录一份用户信息
       is_search: false,
@@ -215,6 +300,8 @@ export default {
       // centerDialogVisible: false,
       editVisible: false, // 显示编辑框
       delVisible: false, // 显示删除框
+      editStickVisible: false, //显示修改加精-框
+      formStick: {},
       select_word: "", // 记录输入框输入的内容
       form: {},
       pageSize: 5, // 页数
@@ -278,6 +365,32 @@ export default {
         this.currentPage = 1;
       });
     },
+    // 加精 + 置顶
+    saveStickEdit() {
+      this.$refs["formStick"].validate(valid => {
+        if (valid) {
+          HttpManager.updateStick(this.formStick)
+            .then(res => {
+              if (res.code === 0) {
+                this.getData();
+                this.editStickVisible = false;
+                this.$notify.success({
+                  title: "修改成功",
+                  showClose: true
+                });
+              } else {
+                this.$notify.error({
+                  title: res.message,
+                  showClose: true
+                });
+              }
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      });
+    },
     // 角色状态修改
     handleStatusChange(row) {
       let text = row.status === 1 ? "审核" : "停用";
@@ -310,6 +423,14 @@ export default {
         content: row.content
       };
       this.editVisible = true;
+    },
+    // 编辑加精 -- 置顶状态
+    isStickEdit(row) {
+      this.formStick = {
+        id: row.id,
+        isStick: row.isStick
+      };
+      this.editStickVisible = true;
     },
     // 保存编辑
     saveEdit() {

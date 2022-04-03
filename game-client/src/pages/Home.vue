@@ -14,7 +14,7 @@
       </el-carousel-item>
     </el-carousel>
     <!--热门公告-->
-    <div class="section">
+    <!-- <div class="section">
       <div class="section-title">
         最新公告
         <div style="float:right">
@@ -33,8 +33,36 @@
           ></news-content-list>
         </el-main>
       </el-container>
-    </div>
+    </div> -->
 
+    <!-- 帖子内容 -->
+    <div class="section">
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane label="综合" name="first">
+          <!-- <card-content-articles
+            :contentList="postList"
+            path="article-album"
+          ></card-content-articles> -->
+        </el-tab-pane>
+        <el-tab-pane label="最新帖子" name="second">
+          <!-- <card-content-articles
+            :contentList="postList"
+            path="article-album"
+          ></card-content-articles> -->
+        </el-tab-pane>
+        <el-tab-pane label="置顶帖子" name="third"></el-tab-pane>
+        <el-tab-pane label="精华帖子" name="fourth"></el-tab-pane>
+      </el-tabs>
+      <div v-if="postList.length == 0">无数据</div>
+      <card-content-articles
+        :contentList="postList"
+        path="article-album"
+      ></card-content-articles>
+      <div style="float:right">
+        <el-link target="_blank" @click="goPostList">更多 ></el-link>
+      </div>
+      <!-- </div> -->
+    </div>
     <!--游戏中心-->
     <div class="section">
       <div class="section-title">
@@ -84,6 +112,7 @@
 <script>
 import NewsContentList from "../components/NewsContentList";
 import GameContentList from "../components/GameContentList";
+import CardContentArticles from "../components/CardContentArticles";
 import ContentList from "../components/ContentList";
 import { swiperList } from "../assets/data/swiper";
 import { HttpManager } from "../api/index";
@@ -95,12 +124,15 @@ export default {
   components: {
     NewsContentList,
     ContentList,
-    GameContentList
+    GameContentList,
+    CardContentArticles
   },
   data() {
     return {
+      activeName: "first",
       swiperList: swiperList, // 轮播图列表
-      newsList: [], // 公告列表
+      // newsList: [], // 公告列表
+      postList: [], // 帖子列表
       gameList: [], // 游戏列表
       linkList: [] //  友链
     };
@@ -109,22 +141,68 @@ export default {
     // 获取友链
     this.getLinkList();
     // 获取前8条公告
-    this.newsListOfTheFirstEight();
+    // this.newsListOfTheFirstEight();
+    // 获取帖子列表
+    this.postListOfTheActiveName(this.activeName);
     // 获取全部游戏
     this.gameListOfTheFirstEight();
   },
   methods: {
-    // 获取前8条公告
-    newsListOfTheFirstEight() {
-      HttpManager.newsListOfTheFirstEight()
-        .then(res => {
-          if (res.code === 0) {
-            this.newsList = res.data;
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+    handleClick(tab, event) {
+      // this.activeName = tab.name;
+      this.postListOfTheActiveName(tab.name);
+    },
+    // // 获取前8条公告
+    // newsListOfTheFirstEight() {
+    //   HttpManager.newsListOfTheFirstEight()
+    //     .then(res => {
+    //       if (res.code === 0) {
+    //         this.newsList = res.data;
+    //       }
+    //     })
+    //     .catch(err => {
+    //       console.log(err);
+    //     });
+    // },
+    // 获取对应帖子列表
+    postListOfTheActiveName(name) {
+      if (name === "first") {
+        HttpManager.listPostOfRound()
+          .then(res => {
+            console.log(res.data);
+            this.postList = res.data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else if (name === "second") {
+        HttpManager.listPostOfUpToDate()
+          .then(res => {
+            console.log(res.data);
+            this.postList = res.data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else if (name === "third") {
+        HttpManager.listPostOfTop()
+          .then(res => {
+            console.log(res.data);
+            this.postList = res.data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      } else if (name === "fourth") {
+        HttpManager.listPostOfRefined()
+          .then(res => {
+            console.log(res.data);
+            this.postList = res.data;
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      }
     },
     // 获取前8条游戏
     gameListOfTheFirstEight() {
@@ -138,12 +216,20 @@ export default {
     },
 
     // 跳转公告列表页面
-    goNewsList() {
-      this.$store.commit("setTempList", this.newsList[0]);
-      // this.$router.push({ path: `/${this.path}/${item.id}` });
-      // /// 打开新窗口
+    // goNewsList() {
+    //   this.$store.commit("setTempList", this.newsList[0]);
+    //   // this.$router.push({ path: `/${this.path}/${item.id}` });
+    //   // /// 打开新窗口
+    //   let routeUrl = this.$router.resolve({
+    //     path: "/news-list"
+    //   });
+    //   window.open(routeUrl.href, "_blank");
+    // },
+    // 跳转帖子列表页面
+    goPostList() {
+      /// 打开新窗口
       let routeUrl = this.$router.resolve({
-        path: "/news-list"
+        path: "/articles"
       });
       window.open(routeUrl.href, "_blank");
     },

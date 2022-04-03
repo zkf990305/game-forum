@@ -5,10 +5,13 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fancoding.basic.project.entity.GfPost;
 import com.fancoding.basic.project.entity.GfPostClassify;
 import com.fancoding.basic.project.entity.GfPostTag;
+import com.fancoding.basic.project.entity.GfUserGfUserRole;
 import com.fancoding.basic.project.form.gf_post.AddPostForm;
+import com.fancoding.basic.project.form.gf_post.PostStickForm;
 import com.fancoding.basic.project.mapper.GfPostMapper;
 import com.fancoding.basic.project.service.IGfPostService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fancoding.basic.project.utils.UUIDUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -117,5 +120,60 @@ public class GfPostServiceImpl extends ServiceImpl<GfPostMapper, GfPost> impleme
                 new UpdateWrapper<GfPost>()
                         .eq("id", id)
                         .set("status", status)) == 1;
+    }
+
+    /**
+     * 获取帖子列表-随机八条
+     * @return
+     */
+    @Override
+    public List<GfPost> listPostOfRound() {
+        return gfPostMapper.listPostOfRound();
+    }
+
+    /**
+     * 获取帖子列表-最新八条
+     * @return
+     */
+    @Override
+    public List<GfPost> listPostOfUpToDate() {
+        return gfPostMapper.listPostOfUpToDate();
+    }
+
+    /**
+     * 获取帖子列表-置顶八条
+     * @return
+     */
+    @Override
+    public List<GfPost> listPostOfTop() {
+        return gfPostMapper.listPostOfTop();
+    }
+
+    /**
+     * 获取帖子列表-加精八条
+     * @return
+     */
+    @Override
+    public List<GfPost> listPostOfRefined() {
+        return gfPostMapper.listPostOfRefined();
+    }
+
+    /**
+     * 加精 + 置顶
+     * @param postStickForm
+     * @return
+     */
+    @Override
+    public boolean updatesStick(PostStickForm postStickForm) {
+        System.out.println(postStickForm.toString());
+        GfPost gfPost = gfPostMapper.selectOne(
+                new QueryWrapper<GfPost>()
+                        .eq("id", postStickForm.buildEntity().getId()));
+        if (gfPost == null) {
+            return false;
+        }
+        gfPost.setIsStick(postStickForm.getIsStick());
+        gfPost.setGmtUpdate(UUIDUtils.getTime().toLocalDateTime());
+        return updateById(gfPost);
     }
 }

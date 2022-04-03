@@ -84,6 +84,9 @@ const HttpManager = {
   // 删除帖子
   deletePost: id => deletes(`gf-post/delete/` + id),
 
+  // 加精 + 置顶
+  updateStick: params => put(`gf-post/update`, params),
+
   // 状态修改
   changePostStatus: data => post(`gf-post/changePostStatus`, data),
 

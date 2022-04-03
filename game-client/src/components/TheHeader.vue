@@ -58,6 +58,30 @@
           ><i class="el-icon-message"></i> 留言</el-button
         >
       </li>
+      <li>
+        <el-popover placement="top" width="400" v-model="visible">
+          <!--热门公告-->
+          <div class="section">
+            <div class="section-title">
+              最新公告
+              <div style="float:right">
+                <el-link target="_blank" @click="goNewsList">更多 ></el-link>
+              </div>
+            </div>
+            <el-divider></el-divider>
+            <!-- <el-container>
+              <el-main> -->
+            <news-content-list
+              :contentList="newsList"
+              path="news-list-album"
+            ></news-content-list>
+            <!-- </el-main>
+            </el-container> -->
+          </div>
+
+          <el-button slot="reference"><i class="el-icon-bell"></i></el-button>
+        </el-popover>
+      </li>
       <li v-show="loginIn && userRole != 3">
         <el-link href="http://localhost:8081/" target="_blank">
           <i class="el-icon-monitor"></i>
@@ -97,21 +121,34 @@ import mixin from "../mixins";
 import { mapGetters } from "vuex";
 import { navMsg, loginMsg, postMsg, menuList } from "../assets/data/header";
 import { ICON } from "../assets/icon/index";
+import NewsContentList from "../components/NewsContentList";
+import ContentList from "../components/ContentList";
+import { HttpManager } from "../api/index";
 
 export default {
   name: "the-header",
   mixins: [mixin],
+  components: {
+    NewsContentList,
+    ContentList
+  },
   data() {
     return {
+      visible: false,
       gameName: "Game",
       navMsg: navMsg, // 左侧导航栏
       loginMsg: loginMsg, // 右侧导航栏
       postMsg: postMsg, // 搜索框右侧导航栏
       menuList: menuList, // 用户下拉菜单项
+      newsList: [], // 公告列表
       keywords: "",
       GAME: ICON.GAME,
       SOUSUO: ICON.SOUSUO
     };
+  },
+  created() {
+    // 获取前8条公告
+    this.newsListOfTheFirstEight();
   },
   computed: {
     ...mapGetters([
@@ -166,6 +203,29 @@ export default {
     },
     changeIndex(value) {
       this.$store.commit("setActiveName", value);
+    },
+    // 获取前8条公告
+    newsListOfTheFirstEight() {
+      HttpManager.newsListOfTheFirstEight()
+        .then(res => {
+          if (res.code === 0) {
+            this.newsList = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+
+    // 跳转公告列表页面
+    goNewsList() {
+      this.$store.commit("setTempList", this.newsList[0]);
+      // this.$router.push({ path: `/${this.path}/${item.id}` });
+      // /// 打开新窗口
+      let routeUrl = this.$router.resolve({
+        path: "/news-list"
+      });
+      window.open(routeUrl.href, "_blank");
     },
     // 跳转编辑帖子页面
     goPageOfMd(path, value) {

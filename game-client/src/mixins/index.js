@@ -16,7 +16,7 @@ const mixin = {
     // 获取游戏图片信息
     attachGameImageUrl(srcUrl) {
       return srcUrl
-        ? srcUrl
+        ? this.$store.state.configure.HOST + srcUrl
         : "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fup.enterdesk.com%2Fedpic%2Fd8%2Fb7%2F36%2Fd8b736f5168f2a98667bce3d7ad3e5ed.jpeg&refer=http%3A%2F%2Fup.enterdesk.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1645368420&t=83b93220ef537b2e33deedd71d4248db";
     },
     // 获取图片信息

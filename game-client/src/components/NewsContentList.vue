@@ -5,7 +5,7 @@
         class="news-content-item"
         v-for="(item, index) in contentList"
         :key="index"
-        style="display: inline;margin-top: 10px;"
+        style="display: inline;margin-top: -10px;"
       >
         <div @click="goAblum(item)">
           <el-link>

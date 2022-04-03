@@ -33,4 +33,36 @@
         from gf_post gp, gf_post_collect gpc
         where gpc.uid = #{id} and gpc.type = 0 and gpc.collect_id = gp.id;
     </select>
+    <select id="listPostOfRound"
+            resultType="com.fancoding.basic.project.entity.GfPost">
+        select `gf_post`.*
+        from `gf_post`
+        where `gf_post`.status = 1 and `gf_post`.is_stick = 0
+        ORDER BY RAND() limit 8
+    </select>
+    <select id="listPostOfUpToDate"
+            resultType="com.fancoding.basic.project.entity.GfPost">
+        select `gf_post`.*
+        from `gf_post`
+        where `gf_post`.status = 1 and `gf_post`.is_stick = 0
+        ORDER BY gmt_create DESC
+            limit 8
+    </select>
+    <select id="listPostOfTop"
+            resultType="com.fancoding.basic.project.entity.GfPost">
+        select `gf_post`.*
+        from `gf_post`
+        where `gf_post`.status = 1 and `gf_post`.is_stick in (2, 3)
+        ORDER BY `gf_post`.is_stick DESC
+            limit 8
+    </select>
+    <select id="listPostOfRefined"
+            resultType="com.fancoding.basic.project.entity.GfPost">
+        select `gf_post`.*
+        from `gf_post`
+        where `gf_post`.status = 1 and `gf_post`.is_stick in (1, 3)
+        ORDER BY `gf_post`.is_stick DESC
+            limit 8
+
+    </select>
 </mapper>

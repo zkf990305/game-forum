@@ -45,6 +45,18 @@ const HttpManager = {
   // 发表帖子
   addPost: data => post("gf-post/addPost", data),
 
+  // 获取帖子列表-随机八条
+  listPostOfRound: () => get(`gf-post/postList/round`),
+
+  // 获取帖子列表-最新八条
+  listPostOfUpToDate: () => get(`gf-post/postList/uptodate`),
+
+  // 获取帖子列表-置顶八条
+  listPostOfTop: () => get(`gf-post/postList/top`),
+
+  // 获取帖子列表-加精八条
+  listPostOfRefined: () => get(`gf-post/postList/refined`),
+
   // 获取全部帖子
   getAllPost: () => get(`gf-post/postList`),
 

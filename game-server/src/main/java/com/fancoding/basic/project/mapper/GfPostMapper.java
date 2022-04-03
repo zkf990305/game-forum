@@ -46,4 +46,28 @@ public interface GfPostMapper extends BaseMapper<GfPost> {
      * @return
      */
     List<GfPost> getPostListOfCollect(String id);
+
+    /**
+     * 获取帖子列表-随机八条
+     * @return
+     */
+    List<GfPost> listPostOfRound();
+
+    /**
+     * 获取帖子列表-最新八条
+     * @return
+     */
+    List<GfPost> listPostOfUpToDate();
+
+    /**
+     * 获取帖子列表-加精八条
+     * @return
+     */
+    List<GfPost> listPostOfTop();
+
+    /**
+     * 获取帖子列表-加精八条
+     * @return
+     */
+    List<GfPost> listPostOfRefined();
 }

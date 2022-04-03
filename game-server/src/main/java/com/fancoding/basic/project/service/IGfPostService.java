@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.fancoding.basic.project.entity.GfPostClassify;
 import com.fancoding.basic.project.entity.GfPostTag;
 import com.fancoding.basic.project.form.gf_post.AddPostForm;
+import com.fancoding.basic.project.form.gf_post.PostStickForm;
 
 import java.util.List;
 
@@ -82,4 +83,35 @@ public interface IGfPostService extends IService<GfPost> {
      * @return
      */
     boolean changePostStatus(Integer id, Integer status);
+
+    /**
+     * 获取帖子列表-随机八条
+     * @return
+     */
+    List<GfPost> listPostOfRound();
+
+    /**
+     * 获取帖子列表-最新八条
+     * @return
+     */
+    List<GfPost> listPostOfUpToDate();
+
+    /**
+     * 获取帖子列表-置顶八条
+     * @return
+     */
+    List<GfPost> listPostOfTop();
+
+    /**
+     * 获取帖子列表-加精八条
+     * @return
+     */
+    List<GfPost> listPostOfRefined();
+
+    /**
+     * 加精 + 置顶
+     * @param postStickForm
+     * @return
+     */
+    boolean updatesStick(PostStickForm postStickForm);
 }
