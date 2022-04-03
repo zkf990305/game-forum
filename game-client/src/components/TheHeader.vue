@@ -82,12 +82,12 @@
           <el-button slot="reference"><i class="el-icon-bell"></i></el-button>
         </el-popover>
       </li>
-      <li v-show="loginIn && userRole != 3">
+      <!-- <li v-show="loginIn && userRole != 3">
         <el-link href="http://localhost:8081/" target="_blank">
           <i class="el-icon-monitor"></i>
           后台管理</el-link
         >
-      </li>
+      </li> -->
     </ul>
     <!--设置-->
     <div class="header-right" v-show="loginIn">

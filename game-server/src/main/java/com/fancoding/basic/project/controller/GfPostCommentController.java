@@ -2,6 +2,7 @@ package com.fancoding.basic.project.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fancoding.basic.project.config.SensitiveFilter;
 import com.fancoding.basic.project.entity.GfPost;
 import com.fancoding.basic.project.entity.GfPostComment;
 import com.fancoding.basic.project.enums.ResultEnum;
@@ -35,6 +36,8 @@ public class GfPostCommentController {
 
     private IGfPostCommentService gfPostCommentService;
 
+    private SensitiveFilter sensitiveFilter;
+
 
     /**
      * 提交评论
@@ -45,6 +48,7 @@ public class GfPostCommentController {
     @PostMapping("/add")
     public ResultVo addComment(@Validated @RequestBody GfPostComment comment){
         comment.setGmtCreate(UUIDUtils.getTime().toLocalDateTime());
+        comment.setContent(sensitiveFilter.filter(comment.getContent()));
         boolean res = gfPostCommentService.addComment(comment);
         if (res){
             return ResultVoUtil.success("评论成功");
@@ -101,7 +105,7 @@ public class GfPostCommentController {
     public ResultVo allComment(){
         List<GfPostComment> comments =  gfPostCommentService.list(
                 new QueryWrapper<GfPostComment>()
-                        .orderByAsc("status"));
+                        .orderByDesc("gmt_create"));
         return ResultVoUtil.success(comments);
     }
 

@@ -165,6 +165,7 @@ export default {
         this.CommentForm.type = this.type;
         this.CommentForm.commentId = this.playId;
         this.CommentForm.content = this.textarea;
+        this.CommentForm.status = 1;
         // 0 代表帖子， 1 代表游戏
         HttpManager.setComment(this.CommentForm)
           .then(res => {

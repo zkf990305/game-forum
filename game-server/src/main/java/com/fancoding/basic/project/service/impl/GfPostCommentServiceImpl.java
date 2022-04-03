@@ -59,7 +59,10 @@ public class GfPostCommentServiceImpl extends ServiceImpl<GfPostCommentMapper, G
      */
     @Override
     public List<GfPostComment> allComment() {
-        return gfPostCommentMapper.selectList(new QueryWrapper<GfPostComment>().eq("status", 1));
+        return gfPostCommentMapper.selectList(
+                new QueryWrapper<GfPostComment>()
+                        .eq("status", 1)
+                        .orderByDesc("gmt_create"));
     }
 
     /**
@@ -69,7 +72,12 @@ public class GfPostCommentServiceImpl extends ServiceImpl<GfPostCommentMapper, G
      */
     @Override
     public List<GfPostComment> commentOfGameId(Integer id) {
-        return gfPostCommentMapper.selectList(new QueryWrapper<GfPostComment>().eq("status", 1).eq("comment_id", id).eq("type", 1));
+        return gfPostCommentMapper.selectList(
+                new QueryWrapper<GfPostComment>()
+                        .eq("status", 1)
+                        .eq("comment_id", id)
+                        .eq("type", 1)
+                        .orderByDesc("gmt_create"));
     }
 
     /**
@@ -83,7 +91,8 @@ public class GfPostCommentServiceImpl extends ServiceImpl<GfPostCommentMapper, G
                 new QueryWrapper<GfPostComment>()
                         .eq("status", 1)
                         .eq("comment_id", id)
-                        .eq("type", 0));
+                        .eq("type", 0)
+                        .orderByDesc("gmt_create"));
     }
 
     /**

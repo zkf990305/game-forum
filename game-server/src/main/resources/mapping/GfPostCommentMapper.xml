@@ -16,6 +16,7 @@
         select * from gf_post_comment
         where type = 0 and comment_id in (
             select id from gf_post where author_id = #{id}
-        );
+        )
+        order by gmt_create DESC
     </select>
 </mapper>

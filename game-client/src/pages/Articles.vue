@@ -125,7 +125,8 @@
           <el-collapse accordion v-model="activeNames" @change="handleChange">
             <el-collapse-item name="1">
               <template slot="title">
-                置顶帖子<i class="header-icon el-icon-info"></i>
+                <span style="color: red">置顶帖子</span
+                ><i class="header-icon el-icon-info"></i>
               </template>
               <card-content-articles
                 :contentList="postList"
