@@ -7,7 +7,7 @@
             欢迎您的到来~
           </el-card>
 
-          <el-dropdown></el-dropdown>
+          <!-- <el-dropdown></el-dropdown> -->
 
           <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -38,7 +38,7 @@
             </div>
           </el-card>
 
-          <el-dropdown></el-dropdown>
+          <!-- <el-dropdown></el-dropdown> -->
 
           <el-card class="box-card">
             <div slot="header" class="clearfix">
@@ -144,12 +144,12 @@
           <el-divider></el-divider>
           <!-- <div style="overflow:auto"> -->
           <span>帖子列表</span>
-          <div v-infinite-scroll="load" infinite-scroll-disabled="disabled">
+          <div>
             <card-content-articles
               :contentList="data"
               path="article-album"
             ></card-content-articles>
-            <div class="pagination">
+            <div>
               <el-pagination
                 @current-change="handleCurrentChange"
                 background
@@ -161,9 +161,6 @@
               </el-pagination>
             </div>
             <br />
-            <!-- <el-button type="success" v-if="loading" @click="more"
-              >加载更多</el-button
-            <p v-if="noMore">没有更多了</p> -->
           </div>
         </el-main>
       </el-container>
@@ -184,7 +181,7 @@ export default {
   },
   data() {
     return {
-      activeName: "1",
+      // activeName: "1",
       activeNames: "1",
       // 数据列表 // 帖子列表
       albumDatas: [],
@@ -332,15 +329,15 @@ export default {
         .catch(err => {
           console.log(err);
         });
-    },
-    load() {
-      this.loading = true;
-    },
-    more() {
-      // 每次点击加三条
-      this.cou += 3;
-      this.loading = false;
     }
+    // load() {
+    //   this.loading = true;
+    // },
+    // more() {
+    //   // 每次点击加三条
+    //   this.cou += 3;
+    //   this.loading = false;
+    // }
   }
 };
 </script>
